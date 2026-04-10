@@ -1296,8 +1296,11 @@
           primaryC,
           primaryL,
         );
-        const badgeWeakBackground = (role, mode) =>
-          roleScaleHex(role, mode, 2);
+        const badgeWeakBackground = (role, mode, darkIndex, lightIndex) =>
+          rgbaFromHex(
+            roleScaleHex(role, mode, mode === 'dark' ? darkIndex : lightIndex),
+            0.16,
+          );
         const calibratedToken = (
           target,
           role,
@@ -1450,8 +1453,8 @@
             'badge',
             'blue',
             'background',
-            badgeWeakBackground('info', 'dark'),
-            badgeWeakBackground('info', 'light'),
+            badgeWeakBackground('info', 'dark', 4, 5),
+            badgeWeakBackground('info', 'light', 4, 5),
           ),
           calibratedToken(
             'badge',
@@ -1464,8 +1467,8 @@
             'badge',
             'teal',
             'background',
-            badgeWeakBackground('teal', 'dark'),
-            badgeWeakBackground('teal', 'light'),
+            badgeWeakBackground('teal', 'dark', 4, 5),
+            badgeWeakBackground('teal', 'light', 4, 5),
           ),
           calibratedToken(
             'badge',
@@ -1478,8 +1481,8 @@
             'badge',
             'green',
             'background',
-            badgeWeakBackground('positive', 'dark'),
-            badgeWeakBackground('positive', 'light'),
+            badgeWeakBackground('positive', 'dark', 4, 6),
+            badgeWeakBackground('positive', 'light', 4, 6),
           ),
           calibratedToken(
             'badge',
@@ -1492,8 +1495,8 @@
             'badge',
             'red',
             'background',
-            badgeWeakBackground('critical', 'dark'),
-            badgeWeakBackground('critical', 'light'),
+            badgeWeakBackground('critical', 'dark', 4, 5),
+            badgeWeakBackground('critical', 'light', 4, 5),
           ),
           calibratedToken(
             'badge',
@@ -1506,8 +1509,8 @@
             'badge',
             'yellow',
             'background',
-            badgeWeakBackground('warning', 'dark'),
-            badgeWeakBackground('warning', 'light'),
+            badgeWeakBackground('warning', 'dark', 4, 6),
+            badgeWeakBackground('warning', 'light', 4, 6),
           ),
           calibratedToken(
             'badge',
@@ -1520,8 +1523,8 @@
             'badge',
             'elephant',
             'background',
-            greyDark[2],
-            greyLight[2],
+            rgbaFromHex(greyDark[7], 0.16),
+            rgbaFromHex(greyLight[7], 0.16),
           ),
 
           aliasToken('fill', 'error', 'default', 'fill.critical.default'),
