@@ -115,6 +115,17 @@
           if (value.startsWith('rgba')) return '비율 없음(알파 토큰)';
           return '비율 없음(CSS 토큰)';
         };
+        const swatchMarkup = (value, textColor, mode) => {
+          const base = mode === 'dark' ? '#101013' : '#ffffff';
+          const labelBg =
+            textColor.toLowerCase() === '#ffffff'
+              ? 'rgba(0,0,0,0.58)'
+              : 'rgba(255,255,255,0.74)';
+          return `<div class="token-swatch" style="background-color:${base};color:${textColor};">
+            <span class="token-swatch-bg" style="background:${value};"></span>
+            <span class="token-swatch-label" style="background:${labelBg};">Aa</span>
+          </div>`;
+        };
         el.innerHTML = filtered
           .map(
             (t) => `
@@ -123,13 +134,13 @@
       <div class="token-row">
         <div class="token-cell">
           <div class="token-mode">다크</div>
-          <div class="token-swatch" style="background:${t.dark};color:${t.darkText};">Aa</div>
+          ${swatchMarkup(t.dark, t.darkText, 'dark')}
           <div class="token-hex">${t.dark}</div>
           <div class="token-ratio">${ratioLabel(t.dark, t.darkRatio, t.darkApca)}</div>
         </div>
         <div class="token-cell">
           <div class="token-mode">라이트</div>
-          <div class="token-swatch" style="background:${t.light};color:${t.lightText};">Aa</div>
+          ${swatchMarkup(t.light, t.lightText, 'light')}
           <div class="token-hex">${t.light}</div>
           <div class="token-ratio">${ratioLabel(t.light, t.lightRatio, t.lightApca)}</div>
         </div>
@@ -553,11 +564,11 @@
           <div class="preview-block" style="background:${d.panel};">
             <div class="preview-block-title" style="color:${d.textSecondary};">표면 위계</div>
             <div class="preview-stack tight">
-              <div class="preview-item" style="background:${d.gradientToBottom};border:1px solid ${d.hairline};">
+              <div class="preview-item" style="background-color:${d.surface};background-image:${d.gradientToBottom};border:1px solid ${d.hairline};">
                 <span class="preview-name" style="color:${d.textSecondary};">기본 그라데이션</span>
                 <span class="preview-value" style="color:${d.textPrimary};">to bottom</span>
               </div>
-              <div class="preview-item" style="background:${d.layeredGradientToTop};border:1px solid ${d.hairline};">
+              <div class="preview-item" style="background-color:${d.panel};background-image:${d.layeredGradientToTop};border:1px solid ${d.hairline};">
                 <span class="preview-name" style="color:${d.textSecondary};">레이어 그라데이션</span>
                 <span class="preview-value" style="color:${d.textPrimary};">to top</span>
               </div>
@@ -571,7 +582,7 @@
                 <span class="surface-chip" style="background:${d.muted};color:${d.textPrimary};border:1px solid ${d.hairline};">약한 배경</span>
               </div>
               <div class="surface-row">
-                <span class="surface-chip" style="background:${d.hairlineBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">헤어라인 배경</span>
+                <span class="surface-chip" style="background-color:${d.surface};background-image:${d.hairlineBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">헤어라인 배경</span>
                 <span class="surface-chip" style="background:${d.radioIndicatorBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">라디오 인디케이터</span>
                 <span class="surface-chip" style="background:${d.swiperBulletBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">스와이퍼 점</span>
               </div>
