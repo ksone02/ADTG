@@ -1264,7 +1264,9 @@
       </div>
     </div>
 
-    <script>
+    <script src="./js/color-system.js"></script>
+    <script src="./js/ui.js"></script>
+    <script type="text/plain" id="legacy-inline-script">
       // ===== OKLCH Color Math =====
       function srgbToLinear(c) {
         return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
