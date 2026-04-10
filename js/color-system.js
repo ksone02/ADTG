@@ -959,6 +959,13 @@
         if (darkApca >= minApca && whiteApca < minApca) {
           return candidates[1];
         }
+        const softApca = minApca - 2.5;
+        if (whiteApca >= softApca && darkApca < softApca) {
+          return candidates[0];
+        }
+        if (darkApca >= softApca && whiteApca < softApca) {
+          return candidates[1];
+        }
 
         const relaxed = candidates
           .filter((c) => c.ratio >= minRatio || c.apca >= minApca)
