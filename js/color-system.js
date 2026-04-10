@@ -184,6 +184,33 @@
         return formatCssColor(mixedHex, mixedAlpha, reference.format);
       }
 
+      function compositeHexOnSurface(fgHex, alpha, surfaceHex) {
+        const [fr, fg, fb] = hexToRgb(fgHex);
+        const [br, bg, bb] = hexToRgb(surfaceHex);
+        return rgbToHex(
+          fr * alpha + br * (1 - alpha),
+          fg * alpha + bg * (1 - alpha),
+          fb * alpha + bb * (1 - alpha),
+        );
+      }
+
+      function alphaForWeakFillOnSurface(
+        fillHex,
+        surfaceHex,
+        minAlpha = 0.16,
+        maxAlpha = 0.46,
+        targetRatio = 1.48,
+      ) {
+        for (let i = 0; i <= 30; i += 1) {
+          const alpha = minAlpha + ((maxAlpha - minAlpha) * i) / 30;
+          const composite = compositeHexOnSurface(fillHex, alpha, surfaceHex);
+          if (contrastRatio(composite, surfaceHex) >= targetRatio) {
+            return Math.round(alpha * 1000) / 1000;
+          }
+        }
+        return maxAlpha;
+      }
+
       function clamp(v, min, max) {
         return Math.max(min, Math.min(max, v));
       }
@@ -1196,7 +1223,24 @@
           primaryC,
           primaryL,
         );
-        const badgeWeakAlpha = mixValue(0.34, 0.16, tdsReferenceWeight);
+        const badgeWeakFill = (fillHex, mode) => {
+          const surfaceHex =
+            mode === 'dark' ? surfaces.dark[2].hex : surfaces.light[2].hex;
+          const adaptiveAlpha = alphaForWeakFillOnSurface(fillHex, surfaceHex);
+          const preBlendAlpha =
+            tdsReferenceWeight >= 0.999
+              ? 0.16
+              : clamp(
+                  (adaptiveAlpha - 0.16 * tdsReferenceWeight) /
+                    (1 - tdsReferenceWeight),
+                  0.16,
+                  0.72,
+                );
+          return rgbaFromHex(
+            fillHex,
+            Math.round(preBlendAlpha * 1000) / 1000,
+          );
+        };
         const calibratedToken = (
           target,
           role,
@@ -1351,8 +1395,8 @@
             'badge',
             'blue',
             'background',
-            rgbaFromHex(roleScaleHex('info', 'dark', 4, true), badgeWeakAlpha),
-            rgbaFromHex(roleScaleHex('info', 'light', 5), badgeWeakAlpha),
+            badgeWeakFill(roleScaleHex('info', 'dark', 4, true), 'dark'),
+            badgeWeakFill(roleScaleHex('info', 'light', 5), 'light'),
           ),
           calibratedToken(
             'badge',
@@ -1365,8 +1409,8 @@
             'badge',
             'teal',
             'background',
-            rgbaFromHex(roleScaleHex('teal', 'dark', 4, true), badgeWeakAlpha),
-            rgbaFromHex(roleScaleHex('teal', 'light', 5), badgeWeakAlpha),
+            badgeWeakFill(roleScaleHex('teal', 'dark', 4, true), 'dark'),
+            badgeWeakFill(roleScaleHex('teal', 'light', 5), 'light'),
           ),
           calibratedToken(
             'badge',
@@ -1379,11 +1423,8 @@
             'badge',
             'green',
             'background',
-            rgbaFromHex(
-              roleScaleHex('positive', 'dark', 4, true),
-              badgeWeakAlpha,
-            ),
-            rgbaFromHex(roleScaleHex('positive', 'light', 6), badgeWeakAlpha),
+            badgeWeakFill(roleScaleHex('positive', 'dark', 4, true), 'dark'),
+            badgeWeakFill(roleScaleHex('positive', 'light', 6), 'light'),
           ),
           calibratedToken(
             'badge',
@@ -1396,11 +1437,8 @@
             'badge',
             'red',
             'background',
-            rgbaFromHex(
-              roleScaleHex('critical', 'dark', 4, true),
-              badgeWeakAlpha,
-            ),
-            rgbaFromHex(roleScaleHex('critical', 'light', 5), badgeWeakAlpha),
+            badgeWeakFill(roleScaleHex('critical', 'dark', 4, true), 'dark'),
+            badgeWeakFill(roleScaleHex('critical', 'light', 5), 'light'),
           ),
           calibratedToken(
             'badge',
@@ -1413,11 +1451,8 @@
             'badge',
             'yellow',
             'background',
-            rgbaFromHex(
-              roleScaleHex('warning', 'dark', 4, true),
-              badgeWeakAlpha,
-            ),
-            rgbaFromHex(roleScaleHex('warning', 'light', 6), badgeWeakAlpha),
+            badgeWeakFill(roleScaleHex('warning', 'dark', 4, true), 'dark'),
+            badgeWeakFill(roleScaleHex('warning', 'light', 8), 'light'),
           ),
           calibratedToken(
             'badge',
@@ -1430,8 +1465,8 @@
             'badge',
             'elephant',
             'background',
-            rgbaFromHex(greyDark[7], badgeWeakAlpha),
-            rgbaFromHex(greyLight[7], badgeWeakAlpha),
+            badgeWeakFill(greyDark[7], 'dark'),
+            badgeWeakFill(greyLight[7], 'light'),
           ),
 
           aliasToken('fill', 'error', 'default', 'fill.critical.default'),
