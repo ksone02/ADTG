@@ -1084,12 +1084,12 @@
               rgbaFromHex(family.lightFill.fill, 0.44),
             ),
             makeSemanticToken(
-            'background',
-            role,
-            'subtle',
-            rgbaFromHex(family.darkFill.fill, 0.14),
-            rgbaFromHex(family.lightFill.fill, 0.055),
-          ),
+              'background',
+              role,
+              'subtle',
+              rgbaFromHex(family.darkFill.fill, 0.14),
+              rgbaFromHex(family.lightFill.fill, 0.055),
+            ),
           ];
         });
 
