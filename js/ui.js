@@ -438,8 +438,8 @@
           </div>
         </div>
         <div class="preview-grid">
-          <div class="preview-block" style="background:${d.primarySubtleBg};">
-            <div class="preview-block-title" style="color:${d.textSecondary};">버튼 / 배지 토큰</div>
+          <div class="preview-block" style="background:${d.panel};border:1px solid ${d.hairline};">
+            <div class="preview-block-title" style="color:${d.textSecondary};">중립 표면 위 버튼 / 배지 토큰</div>
             <div class="preview-row">
               <span class="comp-btn slim" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">기본 약함</span>
               <span class="comp-btn slim" style="background:${d.buttonDangerWeak};color:${d.buttonDangerWeakOn};">위험 약함</span>
