@@ -953,6 +953,13 @@
           .sort((a, b) => b.ratio + b.apca * 0.02 - (a.ratio + a.apca * 0.02));
         if (strict.length) return strict[0];
 
+        if (whiteApca >= minApca && darkApca < minApca) {
+          return candidates[0];
+        }
+        if (darkApca >= minApca && whiteApca < minApca) {
+          return candidates[1];
+        }
+
         const relaxed = candidates
           .filter((c) => c.ratio >= minRatio || c.apca >= minApca)
           .sort((a, b) => b.ratio + b.apca * 0.02 - (a.ratio + a.apca * 0.02));
