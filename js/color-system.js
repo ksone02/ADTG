@@ -296,18 +296,14 @@
         const dC = chroma - refC;
         const dL = (sourceLightness == null ? refL : sourceLightness) - refL;
 
-        // Keep all primaries on a similar tone curve so Toss blue does not appear
-        // systematically brighter than other hues in the same UI layout.
-        const normalizedLShift = clamp(
-          dL * (mode === 'dark' ? 0.34 : 0.3),
-          -0.022,
-          0.022,
-        );
+        // Keep the primary action color close to the user's chosen value at
+        // the 500 step, while still tapering the shift toward scale extremes.
+        const normalizedLShift = clamp(dL, -0.12, 0.24);
 
         return referenceScale.map((hex, i) => {
           const [L, C, H] = toOklch(hex);
           const distance = Math.abs(i - 5);
-          const lWeight = clamp(1 - distance * 0.11, 0.42, 1);
+          const lWeight = clamp(1 - distance * 0.13, 0.34, 1);
           const cWeight = clamp(1 - distance * 0.1, 0.35, 1);
           const nextL = clamp(
             L + normalizedLShift * lWeight,
@@ -1184,8 +1180,8 @@
             variant,
             source.dark,
             source.light,
-            darkText,
-            lightText,
+            darkText || source.darkText,
+            lightText || source.lightText,
           );
         };
         const [primaryL, primaryC, primaryH] = toOklch(
@@ -1249,8 +1245,6 @@
             'primary',
             'fill',
             'fill.primary.default',
-            '#ffffff',
-            '#ffffff',
           ),
           calibratedToken(
             'button',
