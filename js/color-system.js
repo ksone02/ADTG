@@ -145,6 +145,45 @@
         return `rgba(${r},${g},${b},${alpha})`;
       }
 
+      function parseCssColor(value) {
+        if (value === 'transparent') {
+          return { hex: '#000000', alpha: 0, format: 'transparent' };
+        }
+        if (/^#[0-9a-fA-F]{6}$/.test(value)) {
+          return { hex: value.toLowerCase(), alpha: 1, format: 'hex' };
+        }
+        const rgba = value.match(
+          /^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([0-9.]+)\s*\)$/,
+        );
+        if (!rgba) return null;
+        const [, r, g, b, alpha] = rgba;
+        return {
+          hex: rgbToHex(Number(r) / 255, Number(g) / 255, Number(b) / 255),
+          alpha: Number(alpha),
+          format: 'rgba',
+        };
+      }
+
+      function formatCssColor(hex, alpha, referenceFormat) {
+        const roundedAlpha = Math.round(alpha * 1000) / 1000;
+        if (referenceFormat === 'transparent' && roundedAlpha <= 0.001) {
+          return 'transparent';
+        }
+        if (referenceFormat === 'hex' && roundedAlpha >= 0.999) return hex;
+        return rgbaFromHex(hex, roundedAlpha);
+      }
+
+      function mixCssColorValue(baseValue, referenceValue, weight) {
+        const base = parseCssColor(baseValue);
+        const reference = parseCssColor(referenceValue);
+        if (!base || !reference) {
+          return weight >= 0.5 ? referenceValue : baseValue;
+        }
+        const mixedHex = mixOklchHex(base.hex, reference.hex, weight);
+        const mixedAlpha = base.alpha * (1 - weight) + reference.alpha * weight;
+        return formatCssColor(mixedHex, mixedAlpha, reference.format);
+      }
+
       function clamp(v, min, max) {
         return Math.max(min, Math.min(max, v));
       }
@@ -596,7 +635,7 @@
         return map[role] || 'blue';
       }
 
-      const TOSS_PRIMARY_REFERENCE_HEX = '#3485fa';
+      const TOSS_PRIMARY_REFERENCE_HEX = '#3182f6';
       const ROLE_TONE_CALIBRATION = {
         info: { lMix: 0.32, cMix: 0.22, cMaxShift: 0.026 },
         positive: { lMix: 0.34, cMix: 0.2, cMaxShift: 0.024 },
@@ -605,6 +644,94 @@
         accent: { lMix: 0.3, cMix: 0.24, cMaxShift: 0.028 },
         teal: { lMix: 0.3, cMix: 0.2, cMaxShift: 0.024 },
         orange: { lMix: 0.28, cMix: 0.18, cMaxShift: 0.022 },
+      };
+      const TDS_REFERENCE_SEMANTIC_TOKENS = {
+        'button.primary.fill': {
+          dark: '#3485fa',
+          light: '#3182f6',
+          darkText: '#ffffff',
+          lightText: '#ffffff',
+        },
+        'button.primary.weak': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: '#e8f3ff',
+          darkText: '#449bff',
+          lightText: '#2272eb',
+        },
+        'button.danger.weak': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: '#ffeeee',
+          darkText: '#fa616d',
+          lightText: '#e42939',
+        },
+        'button.dark.fill': {
+          dark: '#4d4d59',
+          light: '#4e5968',
+          darkText: '#ffffff',
+          lightText: '#ffffff',
+        },
+        'button.neutral.weak': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: '#f2f4f6',
+          darkText: '#c3c3c6',
+          lightText: '#4e5968',
+        },
+        'button.light.weak': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: 'rgba(222,222,255,0.19)',
+          darkText: '#ffffff',
+          lightText: '#ffffff',
+        },
+        'button.primary.weakPressed': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: 'rgba(49,130,246,0.26)',
+        },
+        'button.danger.weakPressed': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: 'rgba(244,67,54,0.26)',
+        },
+        'button.neutral.weakPressed': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: 'rgba(78,89,104,0.26)',
+        },
+        'button.light.weakPressed': {
+          dark: 'rgba(217,217,255,0.11)',
+          light: 'rgba(255,255,255,0.26)',
+        },
+        'state.button.pressedOverlay': {
+          dark: 'rgba(0,0,0,0.26)',
+          light: 'transparent',
+        },
+        'badge.blue.color': { dark: '#4593fc', light: '#1b64da' },
+        'badge.blue.background': {
+          dark: 'rgba(69,147,252,0.16)',
+          light: 'rgba(49,130,246,0.16)',
+        },
+        'badge.teal.color': { dark: '#30b6b6', light: '#0c8585' },
+        'badge.teal.background': {
+          dark: 'rgba(38,157,166,0.16)',
+          light: 'rgba(0,129,138,0.16)',
+        },
+        'badge.green.color': { dark: '#15c47e', light: '#029359' },
+        'badge.green.background': {
+          dark: 'rgba(21,196,126,0.16)',
+          light: 'rgba(2,162,98,0.16)',
+        },
+        'badge.red.color': { dark: '#f66570', light: '#d22030' },
+        'badge.red.background': {
+          dark: 'rgba(239,83,80,0.16)',
+          light: 'rgba(244,67,54,0.16)',
+        },
+        'badge.yellow.color': { dark: '#faa131', light: '#dd7d02' },
+        'badge.yellow.background': {
+          dark: 'rgba(255,209,88,0.16)',
+          light: 'rgba(255,179,49,0.16)',
+        },
+        'badge.elephant.color': { dark: '#c3c3c6', light: '#4e5968' },
+        'badge.elephant.background': {
+          dark: 'rgba(195,195,198,0.16)',
+          light: 'rgba(78,89,104,0.16)',
+        },
       };
 
       function toOklch(hex) {
@@ -1051,7 +1178,7 @@
           lightText,
         ) => {
           const source = pick(sourceName);
-          return makeSemanticToken(
+          return calibratedToken(
             target,
             role,
             variant,
@@ -1059,6 +1186,58 @@
             source.light,
             darkText,
             lightText,
+          );
+        };
+        const [primaryL, primaryC, primaryH] = toOklch(
+          roleScaleHex('primary', 'light', 5),
+        );
+        const tdsReferenceWeight = referenceAffinity(
+          primaryH,
+          primaryC,
+          primaryL,
+        );
+        const calibratedToken = (
+          target,
+          role,
+          variant,
+          dark,
+          light,
+          darkText,
+          lightText,
+        ) => {
+          const name = `${target}.${role}.${variant}`;
+          const reference = TDS_REFERENCE_SEMANTIC_TOKENS[name];
+          if (!reference) {
+            return makeSemanticToken(
+              target,
+              role,
+              variant,
+              dark,
+              light,
+              darkText,
+              lightText,
+            );
+          }
+          return makeSemanticToken(
+            target,
+            role,
+            variant,
+            mixCssColorValue(dark, reference.dark, tdsReferenceWeight),
+            mixCssColorValue(light, reference.light, tdsReferenceWeight),
+            reference.darkText
+              ? mixCssColorValue(
+                  darkText || reference.darkText,
+                  reference.darkText,
+                  tdsReferenceWeight,
+                )
+              : darkText,
+            reference.lightText
+              ? mixCssColorValue(
+                  lightText || reference.lightText,
+                  reference.lightText,
+                  tdsReferenceWeight,
+                )
+              : lightText,
           );
         };
 
@@ -1071,7 +1250,7 @@
             '#ffffff',
             '#ffffff',
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'primary',
             'weak',
@@ -1080,7 +1259,7 @@
             roleScaleHex('primary', 'dark', 7),
             roleScaleHex('primary', 'light', 6),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'danger',
             'weak',
@@ -1089,7 +1268,7 @@
             roleScaleHex('critical', 'dark', 7),
             roleScaleHex('critical', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'dark',
             'fill',
@@ -1098,7 +1277,7 @@
             '#ffffff',
             '#ffffff',
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'neutral',
             'weak',
@@ -1107,7 +1286,7 @@
             greyDark[7],
             greyLight[7],
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'light',
             'weak',
@@ -1116,7 +1295,7 @@
             '#ffffff',
             '#ffffff',
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'primary',
             'weakPressed',
@@ -1125,7 +1304,7 @@
             roleScaleHex('primary', 'dark', 8),
             roleScaleHex('primary', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'danger',
             'weakPressed',
@@ -1134,7 +1313,7 @@
             roleScaleHex('critical', 'dark', 8),
             roleScaleHex('critical', 'light', 8),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'neutral',
             'weakPressed',
@@ -1143,7 +1322,7 @@
             greyDark[8],
             greyLight[8],
           ),
-          makeSemanticToken(
+          calibratedToken(
             'button',
             'light',
             'weakPressed',
@@ -1152,7 +1331,7 @@
             '#ffffff',
             '#ffffff',
           ),
-          makeSemanticToken(
+          calibratedToken(
             'state',
             'button',
             'pressedOverlay',
@@ -1160,84 +1339,84 @@
             'transparent',
           ),
 
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'blue',
             'color',
             roleScaleHex('info', 'dark', 4, true),
             roleScaleHex('info', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'blue',
             'background',
             rgbaFromHex(roleScaleHex('info', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('info', 'light', 5), 0.16),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'teal',
             'color',
             roleScaleHex('teal', 'dark', 4, true),
             roleScaleHex('teal', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'teal',
             'background',
             rgbaFromHex(roleScaleHex('teal', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('teal', 'light', 5), 0.16),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'green',
             'color',
             roleScaleHex('positive', 'dark', 4, true),
             roleScaleHex('positive', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'green',
             'background',
             rgbaFromHex(roleScaleHex('positive', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('positive', 'light', 6), 0.16),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'red',
             'color',
             roleScaleHex('critical', 'dark', 4, true),
             roleScaleHex('critical', 'light', 7),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'red',
             'background',
             rgbaFromHex(roleScaleHex('critical', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('critical', 'light', 5), 0.16),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'yellow',
             'color',
             roleScaleHex('warning', 'dark', 7, true),
             roleScaleHex('warning', 'light', 9),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'yellow',
             'background',
             rgbaFromHex(roleScaleHex('warning', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('warning', 'light', 6), 0.16),
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'elephant',
             'color',
             greyDark[7],
             greyLight[7],
           ),
-          makeSemanticToken(
+          calibratedToken(
             'badge',
             'elephant',
             'background',
@@ -1259,4 +1438,3 @@
 
         return [...baseTokens, ...tossLikeTokens];
       }
-

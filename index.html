@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ADTG: Adaptive Design Token Generator</title>
+    <title>ADTG: 적응형 디자인 토큰 생성기</title>
     <style>
       * {
         margin: 0;
@@ -999,7 +999,7 @@
   <body>
     <nav class="nav">
       <div class="nav-title">ADTG</div>
-      <div class="picker-label">Adaptive Design Token Generator</div>
+      <div class="picker-label">적응형 디자인 토큰 생성기</div>
     </nav>
 
     <div class="container">
@@ -1030,14 +1030,14 @@
               </div>
             </div>
             <div>
-              <div class="picker-label" style="margin-bottom: 4px">Presets</div>
+              <div class="picker-label" style="margin-bottom: 4px">프리셋</div>
               <div class="presets" id="presets"></div>
             </div>
           </div>
 
           <!-- Grey Scale -->
           <section class="section">
-          <div class="section-title">Neutral Scale</div>
+          <div class="section-title">중립 스케일</div>
           <div class="section-desc">
               Primary hue를 반영한 중립 스케일
           </div>
@@ -1053,12 +1053,12 @@
 
           <!-- Grey Opacity -->
           <section class="section">
-          <div class="section-title">Neutral Opacity Scale</div>
+          <div class="section-title">중립 투명도 스케일</div>
           <div class="section-desc">
               Primary tint가 섞인 rgba 투명도 스케일
           </div>
             <div class="scale-wrap">
-              <div class="scale-label">다크 모드 (on #17171c)</div>
+              <div class="scale-label">다크 모드 (#17171c 위)</div>
               <div
                 class="opacity-row"
                 id="opacityDark"
@@ -1066,7 +1066,7 @@
               ></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">라이트 모드 (on #ffffff)</div>
+              <div class="scale-label">라이트 모드 (#ffffff 위)</div>
               <div
                 class="opacity-row"
                 id="opacityLight"
@@ -1077,7 +1077,7 @@
 
           <!-- Primary Scale -->
           <section class="section">
-            <div class="section-title">Primary Scale</div>
+            <div class="section-title">Primary 스케일</div>
             <div class="section-desc">선택한 색상의 50-900 스케일</div>
             <div class="scale-wrap">
               <div class="scale-label">다크 모드</div>
@@ -1091,7 +1091,7 @@
 
           <!-- Semantic Colors -->
           <section class="section">
-          <div class="section-title">Semantic 색상군</div>
+          <div class="section-title">시맨틱 색상군</div>
           <div class="section-desc">
               의미색 hue는 유지하고, primary 변화는 명도/채도 톤 보정으로만 반영
           </div>
@@ -1099,7 +1099,7 @@
           </section>
 
           <section class="section">
-          <div class="section-title">Semantic 토큰</div>
+          <div class="section-title">시맨틱 토큰</div>
           <div class="section-desc">
               fill/text/border/background/button/badge/state 계층을 한 번에 확인합니다.
           </div>
@@ -1166,16 +1166,16 @@
 
           <!-- Background Tokens -->
           <section class="section">
-          <div class="section-title">Surface 위계</div>
+          <div class="section-title">표면 위계</div>
           <div class="section-desc">
               Dark는 깊이, Light는 평면감과 미세한 톤 차이를 함께 확인합니다.
           </div>
             <div class="scale-wrap">
-              <div class="scale-label">다크 Surface</div>
+              <div class="scale-label">다크 표면</div>
               <div class="scale-row" id="surfacesDark" style="gap: 2px"></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">라이트 Surface</div>
+              <div class="scale-label">라이트 표면</div>
               <div class="scale-row" id="surfacesLight" style="gap: 2px"></div>
             </div>
           </section>

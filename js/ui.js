@@ -95,8 +95,8 @@
         <div class="family-scale">${scaleMarkup(f.lightScale, f.lightFill.index)}</div>
       </div>
       <div class="family-picked">
-        <span class="family-chip" style="background:${rgbaFromHex(f.darkFill.fill, 0.2)};color:${f.darkFill.fill};">dark ${STEPS[f.darkFill.index]} ${f.darkFill.fill}</span>
-        <span class="family-chip" style="background:${rgbaFromHex(f.lightFill.fill, 0.16)};color:${f.lightFill.fill};">light ${STEPS[f.lightFill.index]} ${f.lightFill.fill}</span>
+        <span class="family-chip" style="background:${rgbaFromHex(f.darkFill.fill, 0.2)};color:${f.darkFill.fill};">다크 ${STEPS[f.darkFill.index]} ${f.darkFill.fill}</span>
+        <span class="family-chip" style="background:${rgbaFromHex(f.lightFill.fill, 0.16)};color:${f.lightFill.fill};">라이트 ${STEPS[f.lightFill.index]} ${f.lightFill.fill}</span>
       </div>
     </div>
   `,
@@ -274,6 +274,12 @@
             mode,
             defaults.badgeBlueColor,
           ),
+          badgeTealBg: get('badge.teal.background', mode, defaults.badgeTealBg),
+          badgeTealColor: get(
+            'badge.teal.color',
+            mode,
+            defaults.badgeTealColor,
+          ),
           badgeGreenBg: get(
             'badge.green.background',
             mode,
@@ -340,6 +346,8 @@
           borderWarning: rgbaFromHex('#ffc259', 0.48),
           badgeBlueBg: rgbaFromHex('#4593fc', 0.16),
           badgeBlueColor: '#4593fc',
+          badgeTealBg: rgbaFromHex('#30b6b6', 0.16),
+          badgeTealColor: '#30b6b6',
           badgeGreenBg: rgbaFromHex('#15c47e', 0.16),
           badgeGreenColor: '#15c47e',
           badgeRedBg: rgbaFromHex('#f66570', 0.16),
@@ -384,6 +392,8 @@
           borderWarning: rgbaFromHex('#ffb331', 0.42),
           badgeBlueBg: rgbaFromHex('#3182f6', 0.16),
           badgeBlueColor: '#1b64da',
+          badgeTealBg: rgbaFromHex('#00818a', 0.16),
+          badgeTealColor: '#0c8585',
           badgeGreenBg: rgbaFromHex('#02a262', 0.16),
           badgeGreenColor: '#029359',
           badgeRedBg: rgbaFromHex('#f04452', 0.16),
@@ -410,35 +420,41 @@
           <div class="preview-hero-copy">
             <div class="preview-kicker" style="color:${d.textSecondary};">결제 카드</div>
             <div class="preview-hero-title" style="color:${d.textPrimary};">이번 달 결제 금액 1,240,000원</div>
-            <div class="preview-hero-desc" style="color:${d.textSecondary};">Primary, text, border, background가 함께 반응하는지 확인합니다.</div>
+            <div class="preview-hero-desc" style="color:${d.textSecondary};">기본 색상, 텍스트, 경계, 배경이 함께 반응하는지 확인합니다.</div>
           </div>
           <div class="preview-row">
-            <span class="comp-btn" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};">Primary</span>
-            <span class="comp-btn outline" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Outline</span>
-            <span class="comp-btn slim" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">Primary Weak</span>
+            <span class="comp-btn" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};">기본</span>
+            <span class="comp-btn outline" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">외곽선</span>
+            <span class="comp-btn slim" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">기본 약함</span>
           </div>
           <div class="preview-row">
-            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.borderDefault};">Neutral</span>
-            <span class="comp-chip" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Primary</span>
-            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.hairline};">Hairline</span>
+            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.borderDefault};">중립</span>
+            <span class="comp-chip" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">기본</span>
+            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.hairline};">헤어라인</span>
           </div>
           <div class="preview-mini" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};position:relative;overflow:hidden;">
-            Pressed
+            누름 상태
             <span style="position:absolute;inset:0;background:${d.pressedOverlay};"></span>
           </div>
         </div>
         <div class="preview-grid">
           <div class="preview-block" style="background:${d.primarySubtleBg};">
-            <div class="preview-block-title" style="color:${d.textSecondary};">배지 / 상태</div>
+            <div class="preview-block-title" style="color:${d.textSecondary};">버튼 / 배지 토큰</div>
+            <div class="preview-row">
+              <span class="comp-btn slim" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">기본 약함</span>
+              <span class="comp-btn slim" style="background:${d.buttonDangerWeak};color:${d.buttonDangerWeakOn};">위험 약함</span>
+              <span class="comp-btn slim" style="background:${d.buttonNeutralWeak};color:${d.buttonNeutralWeakOn};">중립 약함</span>
+            </div>
             <div class="preview-row">
               <span class="comp-badge" style="background:${d.badgeBlueBg};color:${d.badgeBlueColor};">정보</span>
+              <span class="comp-badge" style="background:${d.badgeTealBg};color:${d.badgeTealColor};">청록</span>
               <span class="comp-badge" style="background:${d.badgeGreenBg};color:${d.badgeGreenColor};">성공</span>
               <span class="comp-badge" style="background:${d.badgeYellowBg};color:${d.badgeYellowColor};">주의</span>
             </div>
             <div class="preview-row">
               <span class="comp-badge" style="background:${d.badgeRedBg};color:${d.badgeRedColor};">위험</span>
               <span class="comp-badge" style="background:${d.badgeElephantBg};color:${d.badgeElephantColor};">중립</span>
-              <span class="comp-badge outline" style="color:${d.badgeOutlineText};border-color:${d.badgeOutlineBorder};">Outline</span>
+              <span class="comp-badge outline" style="color:${d.badgeOutlineText};border-color:${d.badgeOutlineBorder};">외곽선</span>
             </div>
           </div>
           <div class="preview-block" style="background:${d.panel};">
@@ -450,11 +466,11 @@
               </div>
               <div class="preview-item" style="background:${d.muted};border:1px solid ${d.borderDefault};">
                 <span class="preview-name" style="color:${d.textTertiary};">보조 영역</span>
-                <span class="preview-value" style="color:${d.textSecondary};">Border / text</span>
+                <span class="preview-value" style="color:${d.textSecondary};">경계 / 텍스트</span>
               </div>
               <div class="preview-item" style="background:transparent;border:1px solid ${d.borderPrimary};">
-                <span class="preview-name" style="color:${d.textSecondary};">Outline Button</span>
-                <span class="preview-value" style="color:${d.buttonPrimary};">Primary</span>
+                <span class="preview-name" style="color:${d.textSecondary};">외곽선 버튼</span>
+                <span class="preview-value" style="color:${d.buttonPrimary};">기본</span>
               </div>
             </div>
           </div>
@@ -473,14 +489,14 @@
             </div>
           </div>
           <div class="preview-block" style="background:${d.panel};">
-            <div class="preview-block-title" style="color:${d.textSecondary};">Surface 위계</div>
+            <div class="preview-block-title" style="color:${d.textSecondary};">표면 위계</div>
             <div class="preview-stack tight">
               <div class="surface-row">
-                <span class="surface-chip" style="background:${d.surface};color:${d.textSecondary};border:1px solid ${d.hairline};">Surface</span>
-                <span class="surface-chip" style="background:${d.panel};color:${d.textSecondary};border:1px solid ${d.hairline};">Elevated</span>
-                <span class="surface-chip" style="background:${d.muted};color:${d.textPrimary};border:1px solid ${d.hairline};">Muted</span>
+                <span class="surface-chip" style="background:${d.surface};color:${d.textSecondary};border:1px solid ${d.hairline};">표면</span>
+                <span class="surface-chip" style="background:${d.panel};color:${d.textSecondary};border:1px solid ${d.hairline};">레이어</span>
+                <span class="surface-chip" style="background:${d.muted};color:${d.textPrimary};border:1px solid ${d.hairline};">약한 배경</span>
               </div>
-              <div class="preview-mini" style="background:${d.dimmed};color:#fff;">Dimmed Overlay (${d.dimmed})</div>
+              <div class="preview-mini" style="background:${d.dimmed};color:#fff;">딤드 오버레이 (${d.dimmed})</div>
             </div>
           </div>
         </div>
@@ -560,14 +576,21 @@
             tokenMap[name] ? tokenMap[name].light : '-',
           );
         const componentRows = [
-          ['Primary 버튼 fill', 'button.primary.fill'],
-          ['Primary 버튼 weak', 'button.primary.weak'],
-          ['Primary 버튼 outline', 'border.primary.default'],
-          ['Neutral border hairline', 'border.neutral.hairline'],
-          ['Dimmed overlay', 'background.neutral.dimmed'],
-          ['Critical banner', 'fill.critical.weak'],
-          ['Info badge', 'badge.blue.background'],
-          ['Neutral text', 'text.neutral.primary'],
+          ['기본 버튼 채움', 'button.primary.fill'],
+          ['기본 버튼 약함', 'button.primary.weak'],
+          ['위험 버튼 약함', 'button.danger.weak'],
+          ['중립 버튼 약함', 'button.neutral.weak'],
+          ['기본 버튼 약함 누름', 'button.primary.weakPressed'],
+          ['위험 버튼 약함 누름', 'button.danger.weakPressed'],
+          ['기본 버튼 외곽선', 'border.primary.default'],
+          ['중립 헤어라인 경계', 'border.neutral.hairline'],
+          ['딤드 오버레이', 'background.neutral.dimmed'],
+          ['위험 배너', 'fill.critical.weak'],
+          ['정보 배지', 'badge.blue.background'],
+          ['청록 배지', 'badge.teal.background'],
+          ['중립 배지', 'badge.elephant.background'],
+          ['누름 오버레이', 'state.button.pressedOverlay'],
+          ['중립 텍스트', 'text.neutral.primary'],
         ]
           .map(([label, tokenName]) =>
             row(
@@ -593,7 +616,7 @@
               })
               .map((t) => row(t.name, t.dark, t.light))
               .join('\n');
-            return `### ${target}\n| Token | Dark | Light |\n| --- | --- | --- |\n${rows}`;
+            return `### ${target}\n| 토큰 | 다크 | 라이트 |\n| --- | --- | --- |\n${rows}`;
           })
           .join('\n\n');
         const familyBlocks = semanticFamilies
@@ -601,7 +624,7 @@
             const darkSteps = steps
               .map((step, i) => row(step, f.darkScale[i], f.lightScale[i]))
               .join('\n');
-            return `### ${f.name} (${f.source}, h ${Math.round(f.hue)}, c ${f.chroma.toFixed(3)})\n| Step | Dark | Light |\n| --- | --- | --- |\n${darkSteps}\n\n- Selected semantic step: dark ${steps[f.darkFill.index]} (${f.darkFill.fill}) / light ${steps[f.lightFill.index]} (${f.lightFill.fill})`;
+            return `### ${f.name} (${f.source}, h ${Math.round(f.hue)}, c ${f.chroma.toFixed(3)})\n| 단계 | 다크 | 라이트 |\n| --- | --- | --- |\n${darkSteps}\n\n- 선택된 시맨틱 단계: 다크 ${steps[f.darkFill.index]} (${f.darkFill.fill}) / 라이트 ${steps[f.lightFill.index]} (${f.lightFill.fill})`;
           })
           .join('\n\n');
 
@@ -610,7 +633,7 @@
 입력값: \`${inputHex}\`
 
 ## 핵심 토큰
-| Token | Dark | Light |
+| 토큰 | 다크 | 라이트 |
 | --- | --- | --- |
 ${tokenRow('fill.primary.default')}
 ${tokenRow('text.neutral.primary')}
@@ -620,18 +643,18 @@ ${tokenRow('fill.positive.default')}
 ${tokenRow('fill.warning.default')}
 ${tokenRow('fill.critical.default')}
 
-## Neutral Scale
-| Step | Dark | Light |
+## 중립 스케일
+| 단계 | 다크 | 라이트 |
 | --- | --- | --- |
 ${scaleRows(greyDark, greyLight)}
 
-## Primary Scale
-| Step | Dark | Light |
+## Primary 스케일
+| 단계 | 다크 | 라이트 |
 | --- | --- | --- |
 ${scaleRows(primaryDark, primaryLight)}
 
-## Surface Hierarchy
-| Layer | Dark | Light |
+## 표면 위계
+| 레이어 | 다크 | 라이트 |
 | --- | --- | --- |
 ${row(surfaceDark[0].name, surfaceDark[0].hex, surfaceLight[0].hex)}
 ${row(surfaceDark[1].name, surfaceDark[1].hex, surfaceLight[1].hex)}
@@ -641,20 +664,20 @@ ${row(surfaceDark[4].name, surfaceDark[4].hex, surfaceLight[4].hex)}
 ${row(surfaceDark[5].name, surfaceDark[5].hex, surfaceLight[5].hex)}
 
 ## 실무 컴포넌트 매핑
-| Component | Dark | Light |
+| 컴포넌트 | 다크 | 라이트 |
 | --- | --- | --- |
 ${componentRows}
 
-## Harmonized Semantic Families
+## 조화 보정된 시맨틱 색상군
 ${familyBlocks}
 
-## Semantic Token Matrix
+## 시맨틱 토큰 매트릭스
 ${groupedTokenRows}
 
 ## 사용법
-- Base scale -> semantic -> component 순서로 사용합니다. raw palette를 컴포넌트에서 직접 쓰지 말고 semantic token을 통해 연결하세요.
-- semantic family는 hue는 고정 의미색을 유지하고, primary 영향은 명도/채도 톤 보정으로만 반영됩니다.
-- Fill/Text/Border/Background와 Button/Badge alias를 분리하면 컴포넌트 구현에서 의도 전달이 쉬워집니다.
+- 기본 스케일 -> 시맨틱 -> 컴포넌트 순서로 사용합니다. raw palette를 컴포넌트에서 직접 쓰지 말고 semantic token을 통해 연결하세요.
+- 시맨틱 색상군은 hue는 고정 의미색을 유지하고, primary 영향은 명도/채도 톤 보정으로만 반영됩니다.
+- 채움/텍스트/경계/배경과 버튼/배지 별칭을 분리하면 컴포넌트 구현에서 의도 전달이 쉬워집니다.
 - 같은 역할이라면 target이 달라도 같은 role을 유지하세요. 예: \`fill.warning.default\` + \`text.warning.default\` + \`border.warning.default\`.
 
 ## 실무 팁
@@ -691,7 +714,7 @@ ${groupedTokenRows}
 
       // ===== Main =====
       const presetColors = [
-        '#3485fa', // Toss Blue
+        '#3182f6', // Toss Blue
         '#6366f1', // Indigo
         '#8b5cf6', // Violet
         '#ec4899', // Pink
@@ -870,4 +893,4 @@ ${groupedTokenRows}
 
       initPresets();
       setTokenFilter('all');
-      setColor('#3485fa');
+      setColor('#3182f6');
