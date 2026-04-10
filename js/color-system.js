@@ -766,15 +766,15 @@
       ) {
         const [rr, rg, rb] = hexToRgb(TOSS_PRIMARY_REFERENCE_HEX);
         const [refL, refC, refH] = rgbToOklch(rr, rg, rb);
-        const hueGap = Math.abs(signedHueDelta(refH, hue)) / 36;
+        const hueGap = Math.abs(signedHueDelta(refH, hue)) / 72;
         const chromaGap =
-          sourceChroma == null ? 0 : Math.abs(sourceChroma - refC) / 0.08;
+          sourceChroma == null ? 0 : Math.abs(sourceChroma - refC) / 0.12;
         const lightnessGap =
-          sourceLightness == null ? 0 : Math.abs(sourceLightness - refL) / 0.08;
+          sourceLightness == null ? 0 : Math.abs(sourceLightness - refL) / 0.1;
         const distance = Math.sqrt(
           hueGap * hueGap + chromaGap * chromaGap + lightnessGap * lightnessGap,
         );
-        return clamp(1 - distance, 0, 1);
+        return clamp(Math.exp(-distance * distance), 0, 1);
       }
 
       function buildPrimaryToneDeltas(primaryScale, referencePrimaryScale) {
@@ -1196,6 +1196,7 @@
           primaryC,
           primaryL,
         );
+        const badgeWeakAlpha = mixValue(0.34, 0.16, tdsReferenceWeight);
         const calibratedToken = (
           target,
           role,
@@ -1350,8 +1351,8 @@
             'badge',
             'blue',
             'background',
-            rgbaFromHex(roleScaleHex('info', 'dark', 4, true), 0.16),
-            rgbaFromHex(roleScaleHex('info', 'light', 5), 0.16),
+            rgbaFromHex(roleScaleHex('info', 'dark', 4, true), badgeWeakAlpha),
+            rgbaFromHex(roleScaleHex('info', 'light', 5), badgeWeakAlpha),
           ),
           calibratedToken(
             'badge',
@@ -1364,8 +1365,8 @@
             'badge',
             'teal',
             'background',
-            rgbaFromHex(roleScaleHex('teal', 'dark', 4, true), 0.16),
-            rgbaFromHex(roleScaleHex('teal', 'light', 5), 0.16),
+            rgbaFromHex(roleScaleHex('teal', 'dark', 4, true), badgeWeakAlpha),
+            rgbaFromHex(roleScaleHex('teal', 'light', 5), badgeWeakAlpha),
           ),
           calibratedToken(
             'badge',
@@ -1378,8 +1379,11 @@
             'badge',
             'green',
             'background',
-            rgbaFromHex(roleScaleHex('positive', 'dark', 4, true), 0.16),
-            rgbaFromHex(roleScaleHex('positive', 'light', 6), 0.16),
+            rgbaFromHex(
+              roleScaleHex('positive', 'dark', 4, true),
+              badgeWeakAlpha,
+            ),
+            rgbaFromHex(roleScaleHex('positive', 'light', 6), badgeWeakAlpha),
           ),
           calibratedToken(
             'badge',
@@ -1392,8 +1396,11 @@
             'badge',
             'red',
             'background',
-            rgbaFromHex(roleScaleHex('critical', 'dark', 4, true), 0.16),
-            rgbaFromHex(roleScaleHex('critical', 'light', 5), 0.16),
+            rgbaFromHex(
+              roleScaleHex('critical', 'dark', 4, true),
+              badgeWeakAlpha,
+            ),
+            rgbaFromHex(roleScaleHex('critical', 'light', 5), badgeWeakAlpha),
           ),
           calibratedToken(
             'badge',
@@ -1406,8 +1413,11 @@
             'badge',
             'yellow',
             'background',
-            rgbaFromHex(roleScaleHex('warning', 'dark', 4, true), 0.16),
-            rgbaFromHex(roleScaleHex('warning', 'light', 6), 0.16),
+            rgbaFromHex(
+              roleScaleHex('warning', 'dark', 4, true),
+              badgeWeakAlpha,
+            ),
+            rgbaFromHex(roleScaleHex('warning', 'light', 6), badgeWeakAlpha),
           ),
           calibratedToken(
             'badge',
@@ -1420,8 +1430,8 @@
             'badge',
             'elephant',
             'background',
-            rgbaFromHex(greyDark[7], 0.16),
-            rgbaFromHex(greyLight[7], 0.16),
+            rgbaFromHex(greyDark[7], badgeWeakAlpha),
+            rgbaFromHex(greyLight[7], badgeWeakAlpha),
           ),
 
           aliasToken('fill', 'error', 'default', 'fill.critical.default'),
