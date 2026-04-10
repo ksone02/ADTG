@@ -1312,6 +1312,10 @@
         ) => {
           const name = `${target}.${role}.${variant}`;
           const reference = TDS_REFERENCE_SEMANTIC_TOKENS[name];
+          const referenceWeight =
+            target === 'button' && role === 'primary'
+              ? Math.pow(tdsReferenceWeight, 10)
+              : tdsReferenceWeight;
           if (!reference) {
             return makeSemanticToken(
               target,
@@ -1327,20 +1331,20 @@
             target,
             role,
             variant,
-            mixCssColorValue(dark, reference.dark, tdsReferenceWeight),
-            mixCssColorValue(light, reference.light, tdsReferenceWeight),
+            mixCssColorValue(dark, reference.dark, referenceWeight),
+            mixCssColorValue(light, reference.light, referenceWeight),
             reference.darkText
               ? mixCssColorValue(
                   darkText || reference.darkText,
                   reference.darkText,
-                  tdsReferenceWeight,
+                  referenceWeight,
                 )
               : darkText,
             reference.lightText
               ? mixCssColorValue(
                   lightText || reference.lightText,
                   reference.lightText,
-                  tdsReferenceWeight,
+                  referenceWeight,
                 )
               : lightText,
           );
