@@ -117,13 +117,9 @@
         };
         const swatchMarkup = (value, textColor, mode) => {
           const base = mode === 'dark' ? '#101013' : '#ffffff';
-          const labelBg =
-            textColor.toLowerCase() === '#ffffff'
-              ? 'rgba(0,0,0,0.58)'
-              : 'rgba(255,255,255,0.74)';
           return `<div class="token-swatch" style="background-color:${base};color:${textColor};">
             <span class="token-swatch-bg" style="background:${value};"></span>
-            <span class="token-swatch-label" style="background:${labelBg};">Aa</span>
+            <span class="token-swatch-label">Aa</span>
           </div>`;
         };
         el.innerHTML = filtered
