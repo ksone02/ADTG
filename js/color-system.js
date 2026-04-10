@@ -1197,7 +1197,7 @@
           primaryL,
         );
         const badgeWeakBackground = (role, mode) =>
-          roleScaleHex(role, mode, 1);
+          roleScaleHex(role, mode, 2);
         const calibratedToken = (
           target,
           role,
@@ -1256,8 +1256,8 @@
             'button',
             'primary',
             'weak',
-            rgbaFromHex(roleScaleHex('primary', 'dark', 5), 0.2),
-            rgbaFromHex(roleScaleHex('primary', 'light', 0), 0.16),
+            roleScaleHex('primary', 'dark', 1),
+            roleScaleHex('primary', 'light', 1),
             roleScaleHex('primary', 'dark', 7),
             roleScaleHex('primary', 'light', 6),
           ),
@@ -1265,8 +1265,8 @@
             'button',
             'danger',
             'weak',
-            rgbaFromHex(roleScaleHex('critical', 'dark', 5), 0.18),
-            rgbaFromHex(roleScaleHex('critical', 'light', 0), 0.14),
+            roleScaleHex('critical', 'dark', 1),
+            roleScaleHex('critical', 'light', 1),
             roleScaleHex('critical', 'dark', 7),
             roleScaleHex('critical', 'light', 7),
           ),
@@ -1283,8 +1283,8 @@
             'button',
             'neutral',
             'weak',
-            rgbaFromHex(greyDark[1], 0.11),
-            rgbaFromHex(greyLight[1], 0.12),
+            greyDark[2],
+            greyLight[2],
             greyDark[7],
             greyLight[7],
           ),
