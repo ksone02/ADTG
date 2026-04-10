@@ -169,7 +169,7 @@
         if (referenceFormat === 'transparent' && roundedAlpha <= 0.001) {
           return 'transparent';
         }
-        if (referenceFormat === 'hex' && roundedAlpha >= 0.999) return hex;
+        if (roundedAlpha >= 0.995) return hex;
         return rgbaFromHex(hex, roundedAlpha);
       }
 
@@ -180,7 +180,12 @@
           return weight >= 0.5 ? referenceValue : baseValue;
         }
         const mixedHex = mixOklchHex(base.hex, reference.hex, weight);
-        const mixedAlpha = base.alpha * (1 - weight) + reference.alpha * weight;
+        const alphaWeight =
+          base.alpha >= 0.999 && reference.alpha < 0.999
+            ? weight * weight * weight
+            : weight;
+        const mixedAlpha =
+          base.alpha * (1 - alphaWeight) + reference.alpha * alphaWeight;
         return formatCssColor(mixedHex, mixedAlpha, reference.format);
       }
 
