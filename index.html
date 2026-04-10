@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ADTG: Awesome Design Token Generator</title>
+    <title>ADTG: Adaptive Design Token Generator</title>
     <style>
       * {
         margin: 0;
@@ -371,7 +371,7 @@
       /* Semantic Tokens */
       .token-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 8px;
       }
       .token-filter {
@@ -402,13 +402,18 @@
         border: 1px solid rgba(217, 217, 255, 0.14);
         overflow: hidden;
         background: rgba(217, 217, 255, 0.04);
+        min-width: 0;
       }
       .token-head {
         padding: 8px 10px;
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.02em;
         border-bottom: 1px solid rgba(217, 217, 255, 0.11);
+        line-height: 1.35;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        min-height: 3.1em;
       }
       .token-row {
         display: grid;
@@ -417,6 +422,7 @@
       .token-cell {
         padding: 8px 10px;
         border-right: 1px solid rgba(217, 217, 255, 0.11);
+        min-width: 0;
       }
       .token-cell:last-child {
         border-right: none;
@@ -438,10 +444,12 @@
         font-weight: 700;
       }
       .token-hex {
-        font-size: 8px;
+        font-size: 7px;
         font-family: monospace;
         color: rgba(248, 248, 255, 0.75);
         margin-top: 4px;
+        word-break: break-all;
+        line-height: 1.25;
       }
       .token-ratio {
         font-size: 8px;
@@ -456,7 +464,7 @@
       }
       .mode-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
         gap: 10px;
         margin-top: 12px;
       }
@@ -495,6 +503,47 @@
       .preview-demo-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .preview-shell {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .preview-hero {
+        border-radius: 14px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid rgba(217, 217, 255, 0.13);
+      }
+      .preview-hero-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .preview-kicker {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(248, 248, 255, 0.62);
+      }
+      .preview-hero-title {
+        font-size: 17px;
+        line-height: 1.25;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .preview-hero-desc {
+        font-size: 12px;
+        line-height: 1.45;
+        color: rgba(248, 248, 255, 0.72);
+      }
+      .preview-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
       }
       .preview-block {
@@ -675,14 +724,39 @@
         flex-direction: column;
         gap: 6px;
       }
+      .preview-stack.tight {
+        gap: 5px;
+      }
       .preview-toast {
         border-radius: 8px;
         padding: 8px 10px;
         font-size: 11px;
         font-weight: 600;
       }
+      .preview-alert {
+        border-radius: 10px;
+        padding: 10px 12px;
+        border: 1px solid transparent;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .preview-alert-kicker {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .preview-alert-title {
+        font-size: 12px;
+        line-height: 1.4;
+        font-weight: 800;
+      }
       @media (max-width: 560px) {
         .preview-demo-grid {
+          grid-template-columns: 1fr;
+        }
+        .mode-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -798,7 +872,9 @@
       .modal-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(5, 8, 15, 0.78);
+        background: rgba(5, 8, 15, 0.58);
+        backdrop-filter: blur(18px) saturate(120%);
+        -webkit-backdrop-filter: blur(18px) saturate(120%);
         display: none;
         align-items: center;
         justify-content: center;
@@ -811,13 +887,13 @@
       .modal-panel {
         width: min(920px, 100%);
         max-height: calc(100vh - 48px);
-        background: #111318;
+        background: linear-gradient(180deg, rgba(20, 24, 34, 0.98), rgba(13, 16, 24, 0.98));
         border: 1px solid rgba(217, 217, 255, 0.16);
         border-radius: 14px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
       }
       .modal-head {
         display: flex;
@@ -860,14 +936,21 @@
       .modal-body {
         padding: 14px;
         overflow: auto;
-        background: #0f1116;
+        display: grid;
+        grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+        gap: 12px;
+        background: linear-gradient(180deg, rgba(12, 15, 22, 0.98), rgba(10, 12, 18, 0.98));
+      }
+      .modal-layout {
+        display: contents;
       }
       .guide-box {
         border: 1px solid rgba(217, 217, 255, 0.14);
         background: rgba(217, 217, 255, 0.05);
         border-radius: 10px;
         padding: 10px 12px;
-        margin-bottom: 12px;
+        margin-bottom: 0;
+        align-self: start;
       }
       .guide-title {
         font-size: 12px;
@@ -895,7 +978,7 @@
         color: rgba(248, 248, 255, 0.74);
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        margin: 10px 0 6px;
+        margin: 0 0 6px;
       }
       .modal-body pre {
         margin: 0;
@@ -904,13 +987,19 @@
         color: rgba(253, 253, 254, 0.9);
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         white-space: pre-wrap;
+        min-width: 0;
+      }
+      @media (max-width: 860px) {
+        .modal-body {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <nav class="nav">
       <div class="nav-title">ADTG</div>
-      <div class="picker-label">Awesome Design Token Generator</div>
+      <div class="picker-label">Adaptive Design Token Generator</div>
     </nav>
 
     <div class="container">
@@ -927,7 +1016,7 @@
               />
             </div>
             <div>
-              <div class="picker-label">Primary Color</div>
+              <div class="picker-label">Primary 색상</div>
               <div class="picker-hex">
                 <input
                   type="text"
@@ -948,28 +1037,28 @@
 
           <!-- Grey Scale -->
           <section class="section">
-            <div class="section-title">Grey Scale</div>
-            <div class="section-desc">
-              Primary hue tint 적용 — 순수 회색이 아닌 Primary 톤
-            </div>
+          <div class="section-title">Neutral Scale</div>
+          <div class="section-desc">
+              Primary hue를 반영한 중립 스케일
+          </div>
             <div class="scale-wrap">
-              <div class="scale-label">Dark Mode</div>
+              <div class="scale-label">다크 모드</div>
               <div class="scale-row" id="greyDark"></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">Light Mode</div>
+              <div class="scale-label">라이트 모드</div>
               <div class="scale-row" id="greyLight"></div>
             </div>
           </section>
 
           <!-- Grey Opacity -->
           <section class="section">
-            <div class="section-title">Grey Opacity Scale</div>
-            <div class="section-desc">
-              Primary tint가 포함된 rgba 투명도 스케일
-            </div>
+          <div class="section-title">Neutral Opacity Scale</div>
+          <div class="section-desc">
+              Primary tint가 섞인 rgba 투명도 스케일
+          </div>
             <div class="scale-wrap">
-              <div class="scale-label">Dark Mode (on #17171c)</div>
+              <div class="scale-label">다크 모드 (on #17171c)</div>
               <div
                 class="opacity-row"
                 id="opacityDark"
@@ -977,7 +1066,7 @@
               ></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">Light Mode (on #ffffff)</div>
+              <div class="scale-label">라이트 모드 (on #ffffff)</div>
               <div
                 class="opacity-row"
                 id="opacityLight"
@@ -991,87 +1080,85 @@
             <div class="section-title">Primary Scale</div>
             <div class="section-desc">선택한 색상의 50-900 스케일</div>
             <div class="scale-wrap">
-              <div class="scale-label">Dark Mode</div>
+              <div class="scale-label">다크 모드</div>
               <div class="scale-row" id="primaryDark"></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">Light Mode</div>
+              <div class="scale-label">라이트 모드</div>
               <div class="scale-row" id="primaryLight"></div>
             </div>
           </section>
 
           <!-- Semantic Colors -->
           <section class="section">
-            <div class="section-title">Semantic Families</div>
-            <div class="section-desc">
-              Semantic hue는 의미색 기준으로 유지하고, primary 변경 영향은
-              명도/채도 톤 보정으로만 반영
-            </div>
+          <div class="section-title">Semantic 색상군</div>
+          <div class="section-desc">
+              의미색 hue는 유지하고, primary 변화는 명도/채도 톤 보정으로만 반영
+          </div>
             <div class="semantic-families" id="semanticColors"></div>
           </section>
 
           <section class="section">
-            <div class="section-title">Semantic Tokens</div>
-            <div class="section-desc">
-              Target(fill/text/border/background/button/badge/state) / Role /
-              Variant 구조 + 자동 대비 보정
-            </div>
+          <div class="section-title">Semantic 토큰</div>
+          <div class="section-desc">
+              fill/text/border/background/button/badge/state 계층을 한 번에 확인합니다.
+          </div>
             <div class="token-filter" id="tokenFilter">
               <button
                 class="token-filter-btn active"
                 data-token-filter="all"
                 type="button"
               >
-                ALL
+                전체
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="fill"
                 type="button"
               >
-                FILL
+                채우기
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="text"
                 type="button"
               >
-                TEXT
+                텍스트
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="border"
                 type="button"
               >
-                BORDER
+                경계
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="background"
                 type="button"
               >
-                BACKGROUND
+                배경
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="button"
                 type="button"
               >
-                BUTTON
+                버튼
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="badge"
                 type="button"
               >
-                BADGE
+                배지
               </button>
               <button
                 class="token-filter-btn"
                 data-token-filter="state"
                 type="button"
               >
-                STATE
+                상태
               </button>
             </div>
             <div class="token-grid" id="semanticTokens"></div>
@@ -1079,16 +1166,16 @@
 
           <!-- Background Tokens -->
           <section class="section">
-            <div class="section-title">Background Surfaces</div>
-            <div class="section-desc">
-              Dark: opaque surface steps / Light: flat white + subtle tint
-            </div>
+          <div class="section-title">Surface 위계</div>
+          <div class="section-desc">
+              Dark는 깊이, Light는 평면감과 미세한 톤 차이를 함께 확인합니다.
+          </div>
             <div class="scale-wrap">
-              <div class="scale-label">Dark Surfaces</div>
+              <div class="scale-label">다크 Surface</div>
               <div class="scale-row" id="surfacesDark" style="gap: 2px"></div>
             </div>
             <div class="scale-wrap">
-              <div class="scale-label">Light Surfaces</div>
+              <div class="scale-label">라이트 Surface</div>
               <div class="scale-row" id="surfacesLight" style="gap: 2px"></div>
             </div>
           </section>
@@ -1098,7 +1185,7 @@
           <div class="right-scroll">
             <!-- Dark/Light Preview -->
             <section class="section preview-section">
-              <div class="section-title">Preview</div>
+              <div class="section-title">실사용 미리보기</div>
               <div class="mode-grid" id="modePreview"></div>
             </section>
           </div>
@@ -1109,7 +1196,7 @@
     <section class="export-float">
       <div class="export-meta">
         <div class="export-kicker">팔레트 내보내기</div>
-        <div class="export-title">마크다운 + 적용 가이드</div>
+        <div class="export-title">PALETTE.md + 적용 가이드</div>
         <div class="export-desc">
           토큰 문서 확인, 복사, 다운로드를 한 번에 진행합니다.
         </div>
@@ -1143,32 +1230,36 @@
           </div>
         </div>
         <div class="modal-body">
-          <div class="guide-box">
-            <div class="guide-title">적용 가이드</div>
-            <div class="guide-line">
-              <span class="guide-label">1. 저장</span>다운로드한
-              <code>palette.md</code>를 프로젝트의
-              <code>docs/design/palette.md</code> 또는
-              <code>design-system/palette.md</code>에 보관합니다.
+          <div class="modal-layout">
+            <div class="guide-box">
+              <div class="guide-title">적용 가이드</div>
+              <div class="guide-line">
+                <span class="guide-label">1. 저장</span>다운로드한
+                <code>palette.md</code>를 프로젝트의
+                <code>docs/design/palette.md</code> 또는
+                <code>design-system/palette.md</code>에 보관합니다.
+              </div>
+              <div class="guide-line">
+                <span class="guide-label">2. 토큰화</span
+                ><code>fill/text/border/background/button/badge</code> 토큰을 앱
+                토큰 파일(<code>styles/tokens.css</code>,
+                <code>tokens.ts</code>)로 매핑합니다.
+              </div>
+              <div class="guide-line">
+                <span class="guide-label">3. 적용</span>컴포넌트에서 raw hex 대신
+                semantic token만 사용합니다. 예: 버튼은
+                <code>button.primary.fill</code>, 배지는 <code>badge.*</code>.
+              </div>
+              <div class="guide-line">
+                <span class="guide-label">4. 검증</span>라이트/다크에서 버튼
+                텍스트 대비, 배지 가독성, border hairline 노이즈를 QA 체크합니다.
+              </div>
             </div>
-            <div class="guide-line">
-              <span class="guide-label">2. 토큰화</span
-              ><code>fill/text/border/background/button/badge</code> 토큰을 앱
-              토큰 파일(<code>styles/tokens.css</code>,
-              <code>tokens.ts</code>)로 매핑합니다.
-            </div>
-            <div class="guide-line">
-              <span class="guide-label">3. 적용</span>컴포넌트에서 raw hex 대신
-              semantic token만 사용합니다. 예: 버튼은
-              <code>button.primary.fill</code>, 배지는 <code>badge.*</code>.
-            </div>
-            <div class="guide-line">
-              <span class="guide-label">4. 검증</span>라이트/다크에서 버튼
-              텍스트 대비, 배지 가독성, border hairline 노이즈를 QA 체크합니다.
+            <div>
+              <div class="md-preview-title">마크다운 미리보기</div>
+              <pre id="paletteMdPreview"></pre>
             </div>
           </div>
-          <div class="md-preview-title">마크다운 미리보기</div>
-          <pre id="paletteMdPreview"></pre>
         </div>
       </div>
     </div>
@@ -1396,32 +1487,13 @@
         });
       }
 
-      function isNearTossPrimary(
-        hue,
-        sourceChroma = null,
-        sourceLightness = null,
-      ) {
-        const [rr, rg, rb] = hexToRgb(TOSS_PRIMARY_REFERENCE_HEX);
-        const [refL, refC, refH] = rgbToOklch(rr, rg, rb);
-        const dH = Math.abs(signedHueDelta(refH, hue));
-        const dC = sourceChroma == null ? 0 : Math.abs(sourceChroma - refC);
-        const dL =
-          sourceLightness == null ? 0 : Math.abs(sourceLightness - refL);
-        return dH < 0.25 && dC < 0.003 && dL < 0.006;
-      }
-
       function generateGreyScale(
         hue,
         mode,
         sourceChroma = null,
         sourceLightness = null,
       ) {
-        if (isNearTossPrimary(hue, sourceChroma, sourceLightness)) {
-          return mode === 'dark'
-            ? [...TOSS_REFERENCE_SCALES.grey.dark]
-            : [...TOSS_REFERENCE_SCALES.grey.light];
-        }
-
+        const affinity = referenceAffinity(hue, sourceChroma, sourceLightness);
         const tintChromaBase =
           sourceChroma == null
             ? 0.008
@@ -1430,7 +1502,15 @@
           mode === 'dark'
             ? TOSS_REFERENCE_SCALES.grey.dark
             : TOSS_REFERENCE_SCALES.grey.light;
-        return tintReferenceScale(referenceScale, hue, tintChromaBase, mode);
+        const generatedScale = tintReferenceScale(
+          referenceScale,
+          hue,
+          tintChromaBase,
+          mode,
+        );
+        return generatedScale.map((hex, i) =>
+          mixOklchHex(hex, referenceScale[i], affinity),
+        );
       }
 
       function generatePrimaryScale(hue, chroma, mode, sourceLightness = null) {
@@ -1444,23 +1524,19 @@
         const dC = chroma - refC;
         const dL = (sourceLightness == null ? refL : sourceLightness) - refL;
 
-        const isTossPrimary =
-          Math.abs(dH) < 0.25 && Math.abs(dC) < 0.002 && Math.abs(dL) < 0.003;
-        if (isTossPrimary) return [...referenceScale];
-
         // Keep all primaries on a similar tone curve so Toss blue does not appear
         // systematically brighter than other hues in the same UI layout.
         const normalizedLShift = clamp(
-          dL * (mode === 'dark' ? 0.42 : 0.36),
-          -0.028,
-          0.028,
+          dL * (mode === 'dark' ? 0.34 : 0.3),
+          -0.022,
+          0.022,
         );
 
         return referenceScale.map((hex, i) => {
           const [L, C, H] = toOklch(hex);
           const distance = Math.abs(i - 5);
-          const lWeight = clamp(1 - distance * 0.1, 0.45, 1);
-          const cWeight = clamp(1 - distance * 0.12, 0.3, 1);
+          const lWeight = clamp(1 - distance * 0.11, 0.42, 1);
+          const cWeight = clamp(1 - distance * 0.1, 0.35, 1);
           const nextL = clamp(
             L + normalizedLShift * lWeight,
             mode === 'dark' ? 0.2 : 0.14,
@@ -1498,27 +1574,7 @@
         sourceChroma = null,
         sourceLightness = null,
       ) {
-        if (isNearTossPrimary(hue, sourceChroma, sourceLightness)) {
-          if (mode === 'dark') {
-            return [
-              { name: 'Screen', hex: '#202027' }, // darkThemePcScreenBg
-              { name: 'App', hex: '#17171c' }, // darkThemeBackground
-              { name: 'Table', hex: '#202027' }, // darkThemeBackgroundLevel01
-              { name: 'Layered', hex: '#2c2c35' }, // darkThemeBackgroundLevel02
-              { name: 'Float', hex: '#2c2c35' }, // darkFloatBackground
-              { name: 'Grey BG', hex: '#101013' }, // darkThemeBackgroundLevelB01
-            ];
-          }
-          return [
-            { name: 'Screen', hex: '#f6f7f9' }, // lightThemePcScreenBg
-            { name: 'App', hex: '#ffffff' }, // lightThemeBackground
-            { name: 'Table', hex: '#ffffff' }, // lightThemeBackgroundLevel01
-            { name: 'Layered', hex: '#ffffff' }, // lightThemeBackgroundLevel02
-            { name: 'Float', hex: '#ffffff' }, // floatBackground
-            { name: 'Grey BG', hex: '#f2f4f6' }, // lightThemeBackgroundLevelB01
-          ];
-        }
-
+        const affinity = referenceAffinity(hue, sourceChroma, sourceLightness);
         const tint =
           sourceChroma == null
             ? 0.005
@@ -1533,19 +1589,20 @@
             '#101013',
           ];
           const names = [
-            'Screen',
-            'App',
-            'Table',
-            'Layered',
-            'Float',
-            'Grey BG',
+            '스크린',
+            '앱',
+            '표면',
+            '레이어',
+            '플로트',
+            '그레이 배경',
           ];
           return refs.map((hex, i) => {
             const [L] = toOklch(hex);
             const cMul = [0.55, 0.65, 0.62, 0.72, 0.75, 0.48][i];
+            const generatedHex = oklchToHexClamped(L, tint * cMul, hue);
             return {
               name: names[i],
-              hex: oklchToHexClamped(L, tint * cMul, hue),
+              hex: mixOklchHex(generatedHex, hex, affinity),
             };
           });
         }
@@ -1557,14 +1614,15 @@
           '#ffffff',
           '#f2f4f6',
         ];
-        const names = ['Screen', 'App', 'Table', 'Layered', 'Float', 'Grey BG'];
+        const names = ['스크린', '앱', '표면', '레이어', '플로트', '그레이 배경'];
         return refs.map((hex, i) => {
           if (hex === '#ffffff') return { name: names[i], hex };
           const [L] = toOklch(hex);
           const cMul = [0.35, 0, 0, 0, 0, 0.45][i];
+          const generatedHex = oklchToHexClamped(L, tint * cMul, hue);
           return {
             name: names[i],
-            hex: oklchToHexClamped(L, tint * cMul, hue),
+            hex: mixOklchHex(generatedHex, hex, affinity),
           };
         });
       }
@@ -1821,6 +1879,44 @@
         return rgbToOklch(r, g, b);
       }
 
+      function mixValue(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function mixHue(a, b, t) {
+        return normalizeHue(a + signedHueDelta(a, b) * t);
+      }
+
+      function mixOklchHex(fromHex, toHex, t) {
+        if (t <= 0) return fromHex;
+        if (t >= 1) return toHex;
+        const [aL, aC, aH] = toOklch(fromHex);
+        const [bL, bC, bH] = toOklch(toHex);
+        return oklchToHexClamped(
+          mixValue(aL, bL, t),
+          mixValue(aC, bC, t),
+          mixHue(aH, bH, t),
+        );
+      }
+
+      function referenceAffinity(
+        hue,
+        sourceChroma = null,
+        sourceLightness = null,
+      ) {
+        const [rr, rg, rb] = hexToRgb(TOSS_PRIMARY_REFERENCE_HEX);
+        const [refL, refC, refH] = rgbToOklch(rr, rg, rb);
+        const hueGap = Math.abs(signedHueDelta(refH, hue)) / 36;
+        const chromaGap =
+          sourceChroma == null ? 0 : Math.abs(sourceChroma - refC) / 0.08;
+        const lightnessGap =
+          sourceLightness == null ? 0 : Math.abs(sourceLightness - refL) / 0.08;
+        const distance = Math.sqrt(
+          hueGap * hueGap + chromaGap * chromaGap + lightnessGap * lightnessGap,
+        );
+        return clamp(1 - distance, 0, 1);
+      }
+
       function buildPrimaryToneDeltas(primaryScale, referencePrimaryScale) {
         return primaryScale.map((hex, i) => {
           const [Lp, Cp] = toOklch(hex);
@@ -1933,7 +2029,7 @@
         return roles.map((item) => {
           let darkScale = [];
           let lightScale = [];
-          let source = 'toss-reference-calibrated';
+          let source = '기준 보정';
           const preferredStepByRole = {
             primary: 5,
             info: 5,
@@ -1946,7 +2042,7 @@
           if (item.role === 'primary') {
             darkScale = [...primaryDarkScale];
             lightScale = [...primaryLightScale];
-            source = 'dynamic-primary';
+            source = 'primary 동적';
           } else {
             const familyKey = roleReferenceFamily(item.role);
             darkScale = applyToneCalibrationToScale(
@@ -1959,7 +2055,7 @@
               primaryToneDelta.light,
               item.role,
             );
-            source = `calibrated-${familyKey}-tone`;
+            source = `${familyKey} 기준 보정`;
           }
 
           const preferredStep = preferredStepByRole[item.role] || 5;
@@ -2247,7 +2343,7 @@
             'primary',
             'weak',
             rgbaFromHex(roleScaleHex('primary', 'dark', 5), 0.2),
-            roleScaleHex('primary', 'light', 0),
+            rgbaFromHex(roleScaleHex('primary', 'light', 0), 0.16),
             roleScaleHex('primary', 'dark', 7),
             roleScaleHex('primary', 'light', 6),
           ),
@@ -2255,8 +2351,8 @@
             'button',
             'danger',
             'weak',
-            rgbaFromHex(roleScaleHex('critical', 'dark', 5), 0.2),
-            roleScaleHex('critical', 'light', 0),
+            rgbaFromHex(roleScaleHex('critical', 'dark', 5), 0.18),
+            rgbaFromHex(roleScaleHex('critical', 'light', 0), 0.14),
             roleScaleHex('critical', 'dark', 7),
             roleScaleHex('critical', 'light', 7),
           ),
@@ -2273,8 +2369,8 @@
             'button',
             'neutral',
             'weak',
-            'rgba(217,217,255,0.11)',
-            greyLight[1],
+            rgbaFromHex(greyDark[1], 0.11),
+            rgbaFromHex(greyLight[1], 0.12),
             greyDark[7],
             greyLight[7],
           ),
@@ -2318,7 +2414,7 @@
             'button',
             'light',
             'weakPressed',
-            'rgba(255,255,255,0.26)',
+            'rgba(217,217,255,0.11)',
             'rgba(255,255,255,0.26)',
             '#ffffff',
             '#ffffff',
@@ -2401,12 +2497,19 @@
             rgbaFromHex(roleScaleHex('warning', 'dark', 4, true), 0.16),
             rgbaFromHex(roleScaleHex('warning', 'light', 6), 0.16),
           ),
-          aliasToken('badge', 'elephant', 'color', 'text.neutral.secondary'),
-          aliasToken(
+          makeSemanticToken(
+            'badge',
+            'elephant',
+            'color',
+            greyDark[7],
+            greyLight[7],
+          ),
+          makeSemanticToken(
             'badge',
             'elephant',
             'background',
-            'background.neutral.muted',
+            rgbaFromHex(greyDark[7], 0.16),
+            rgbaFromHex(greyLight[7], 0.16),
           ),
 
           aliasToken('fill', 'error', 'default', 'fill.critical.default'),
@@ -2446,7 +2549,7 @@
             const textColor = isLight
               ? 'rgba(0,0,0,0.6)'
               : 'rgba(255,255,255,0.7)';
-            return `<div class="scale-cell pickable" data-pick-hex="${hex}" title="Click to use ${hex}" style="background:${hex};">
+            return `<div class="scale-cell pickable" data-pick-hex="${hex}" title="클릭해서 ${hex} 적용" style="background:${hex};">
       <span class="step" style="color:${textColor}">${STEPS[i]}</span>
       <span class="hex" style="color:${textColor}">${hex}</span>
     </div>`;
@@ -2481,7 +2584,7 @@
             const textColor = isLight
               ? 'rgba(0,0,0,0.5)'
               : 'rgba(255,255,255,0.6)';
-            return `<div class="scale-cell pickable" data-pick-hex="${s.hex}" title="Click to use ${s.hex}" style="background:${s.hex};border-radius:0;">
+            return `<div class="scale-cell pickable" data-pick-hex="${s.hex}" title="클릭해서 ${s.hex} 적용" style="background:${s.hex};border-radius:0;">
       <span class="step" style="color:${textColor}">${s.name}</span>
       <span class="hex" style="color:${textColor}">${s.hex}</span>
     </div>`;
@@ -2513,11 +2616,11 @@
         <div class="family-meta">${f.source} · h ${Math.round(f.hue)} / c ${f.chroma.toFixed(3)}</div>
       </div>
       <div class="family-row">
-        <div class="family-label">DARK</div>
+        <div class="family-label">다크</div>
         <div class="family-scale">${scaleMarkup(f.darkScale, f.darkFill.index)}</div>
       </div>
       <div class="family-row">
-        <div class="family-label">LIGHT</div>
+        <div class="family-label">라이트</div>
         <div class="family-scale">${scaleMarkup(f.lightScale, f.lightFill.index)}</div>
       </div>
       <div class="family-picked">
@@ -2542,16 +2645,16 @@
       <div class="token-head">${t.name}</div>
       <div class="token-row">
         <div class="token-cell">
-          <div class="token-mode">DARK</div>
+          <div class="token-mode">다크</div>
           <div class="token-swatch" style="background:${t.dark};color:${t.darkText};">Aa</div>
           <div class="token-hex">${t.dark}</div>
-          <div class="token-ratio">${t.darkRatio ? `WCAG ${t.darkRatio.toFixed(2)}:1 / APCA ${Math.round(t.darkApca)}` : 'contrast n/a (alpha token)'}</div>
+          <div class="token-ratio">${t.darkRatio ? `WCAG ${t.darkRatio.toFixed(2)}:1 / APCA ${Math.round(t.darkApca)}` : '비율 없음(알파 토큰)'}</div>
         </div>
         <div class="token-cell">
-          <div class="token-mode">LIGHT</div>
+          <div class="token-mode">라이트</div>
           <div class="token-swatch" style="background:${t.light};color:${t.lightText};">Aa</div>
           <div class="token-hex">${t.light}</div>
-          <div class="token-ratio">${t.lightRatio ? `WCAG ${t.lightRatio.toFixed(2)}:1 / APCA ${Math.round(t.lightApca)}` : 'contrast n/a (alpha token)'}</div>
+          <div class="token-ratio">${t.lightRatio ? `WCAG ${t.lightRatio.toFixed(2)}:1 / APCA ${Math.round(t.lightApca)}` : '비율 없음(알파 토큰)'}</div>
         </div>
       </div>
     </div>
@@ -2584,11 +2687,44 @@
           muted: get('background.neutral.muted', mode, defaults.muted),
           dimmed: get('background.neutral.dimmed', mode, defaults.dimmed),
           hairline: get('border.neutral.hairline', mode, defaults.hairline),
+          borderDefault: get(
+            'border.neutral.default',
+            mode,
+            defaults.borderDefault,
+          ),
           textPrimary: get('text.neutral.primary', mode, defaults.textPrimary),
           textSecondary: get(
             'text.neutral.secondary',
             mode,
             defaults.textSecondary,
+          ),
+          textTertiary: get(
+            'text.neutral.tertiary',
+            mode,
+            defaults.textTertiary,
+          ),
+          primarySubtleBg: get(
+            'background.primary.subtle',
+            mode,
+            defaults.primarySubtleBg,
+          ),
+          fillInfoWeak: get('fill.info.weak', mode, defaults.fillInfoWeak),
+          fillCriticalWeak: get(
+            'fill.critical.weak',
+            mode,
+            defaults.fillCriticalWeak,
+          ),
+          textInfo: get('text.info.default', mode, defaults.textInfo),
+          textCritical: get(
+            'text.critical.default',
+            mode,
+            defaults.textCritical,
+          ),
+          borderInfo: get('border.info.default', mode, defaults.borderInfo),
+          borderCritical: get(
+            'border.critical.default',
+            mode,
+            defaults.borderCritical,
           ),
           buttonPrimary: get(
             'button.primary.fill',
@@ -2651,6 +2787,16 @@
             mode,
             defaults.borderWarning,
           ),
+          badgeOutlineBorder: get(
+            'border.neutral.hairline',
+            mode,
+            defaults.badgeOutlineBorder,
+          ),
+          badgeOutlineText: get(
+            'text.neutral.secondary',
+            mode,
+            defaults.badgeOutlineText,
+          ),
           badgeBlueBg: get('badge.blue.background', mode, defaults.badgeBlueBg),
           badgeBlueColor: get(
             'badge.blue.color',
@@ -2697,8 +2843,17 @@
           muted: surfaces.dark[3].hex,
           dimmed: 'rgba(0,0,0,0.56)',
           hairline: '#3c3c47',
+          borderDefault: '#62626d',
           textPrimary: greyDark[9],
           textSecondary: greyDark[7],
+          textTertiary: greyDark[6],
+          primarySubtleBg: rgbaFromHex(primaryDark[5], 0.18),
+          fillInfoWeak: rgbaFromHex('#4593fc', 0.16),
+          fillCriticalWeak: rgbaFromHex('#fa616d', 0.18),
+          textInfo: '#4593fc',
+          textCritical: '#f66570',
+          borderInfo: rgbaFromHex('#4593fc', 0.36),
+          borderCritical: rgbaFromHex('#fa616d', 0.38),
           buttonPrimary: primaryDark[5],
           buttonPrimaryOn: '#ffffff',
           buttonPrimaryWeak: rgbaFromHex(primaryDark[5], 0.2),
@@ -2722,6 +2877,8 @@
           badgeYellowColor: '#faa131',
           badgeElephantBg: rgbaFromHex('#c3c3c6', 0.16),
           badgeElephantColor: '#c3c3c6',
+          badgeOutlineBorder: '#3c3c47',
+          badgeOutlineText: greyDark[7],
         });
 
         const light = modeData('light', {
@@ -2730,8 +2887,17 @@
           muted: surfaces.light[5].hex,
           dimmed: 'rgba(0,0,0,0.2)',
           hairline: '#e5e8eb',
+          borderDefault: '#b0b8c1',
           textPrimary: greyLight[9],
           textSecondary: greyLight[7],
+          textTertiary: greyLight[6],
+          primarySubtleBg: rgbaFromHex(primaryLight[5], 0.1),
+          fillInfoWeak: rgbaFromHex('#3182f6', 0.14),
+          fillCriticalWeak: rgbaFromHex('#f04452', 0.14),
+          textInfo: '#1b64da',
+          textCritical: '#d22030',
+          borderInfo: rgbaFromHex('#3182f6', 0.28),
+          borderCritical: rgbaFromHex('#f04452', 0.3),
           buttonPrimary: primaryLight[5],
           buttonPrimaryOn: '#ffffff',
           buttonPrimaryWeak: rgbaFromHex(primaryLight[5], 0.16),
@@ -2755,82 +2921,95 @@
           badgeYellowColor: '#dd7d02',
           badgeElephantBg: rgbaFromHex('#4e5968', 0.16),
           badgeElephantColor: '#4e5968',
+          badgeOutlineBorder: '#d1d6db',
+          badgeOutlineText: greyLight[7],
         });
 
         const renderMode = (label, d) => `
     <div class="mode-card" style="background:${d.surface};color:${d.textPrimary};">
       <div class="preview-mode-head">
-        <div class="mode-label" style="color:${d.textSecondary};">${label}</div>
+        <div>
+          <div class="mode-label" style="color:${d.textSecondary};">${label}</div>
+          <div class="preview-hero-title" style="color:${d.textPrimary};font-size:15px;">실사용 조합</div>
+        </div>
         <div class="preview-token" style="color:${d.textSecondary};"><span class="preview-token-dot" style="background:${d.buttonPrimary};"></span>${d.buttonPrimary}</div>
       </div>
-      <div class="preview-demo-grid">
-        <div class="preview-block" style="background:${d.panel};">
-          <div class="preview-block-title" style="color:${d.textSecondary};">Neutral Surfaces</div>
-          <div class="preview-stack">
-            <div class="preview-item" style="background:${d.surface};border:1px solid ${d.hairline};">
-              <span class="preview-name" style="color:${d.textSecondary};">App Surface</span>
-              <span class="preview-value" style="color:${d.textPrimary};">${d.surface}</span>
-            </div>
-            <div class="preview-item" style="background:${d.panel};border:1px solid ${d.hairline};">
-              <span class="preview-name" style="color:${d.textSecondary};">Layered Surface</span>
-              <span class="preview-value" style="color:${d.textPrimary};">${d.panel}</span>
-            </div>
-            <div class="preview-item" style="background:${d.muted};border:1px solid ${d.hairline};">
-              <span class="preview-name" style="color:${d.textSecondary};">Grey Surface</span>
-              <span class="preview-value" style="color:${d.textPrimary};">${d.muted}</span>
-            </div>
+      <div class="preview-shell">
+        <div class="preview-hero" style="background:linear-gradient(180deg, ${d.primarySubtleBg}, ${d.panel});border-color:${d.borderPrimary};">
+          <div class="preview-hero-copy">
+            <div class="preview-kicker" style="color:${d.textSecondary};">결제 카드</div>
+            <div class="preview-hero-title" style="color:${d.textPrimary};">이번 달 결제 금액 1,240,000원</div>
+            <div class="preview-hero-desc" style="color:${d.textSecondary};">Primary, text, border, background가 함께 반응하는지 확인합니다.</div>
           </div>
-          <div class="preview-mini" style="background:${d.dimmed};color:#fff;">Dimmed Overlay (${d.dimmed})</div>
-        </div>
-        <div class="preview-block" style="background:${d.panel};">
-          <div class="preview-block-title" style="color:${d.textSecondary};">Buttons</div>
           <div class="preview-row">
             <span class="comp-btn" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};">Primary</span>
-            <span class="comp-btn" style="background:${d.buttonDarkFill};color:${d.buttonDarkOn};">Dark Fill</span>
-            <span class="comp-btn" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">Primary Weak</span>
-          </div>
-          <div class="preview-row">
-            <span class="comp-btn" style="background:${d.buttonDangerWeak};color:${d.buttonDangerWeakOn};">Danger Weak</span>
             <span class="comp-btn outline" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Outline</span>
-            <span class="preview-mini" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};position:relative;overflow:hidden;">Pressed <span style="position:absolute;inset:0;background:${d.pressedOverlay};"></span></span>
-          </div>
-        </div>
-        <div class="preview-block" style="background:${d.panel};">
-          <div class="preview-block-title" style="color:${d.textSecondary};">Badges + Chips</div>
-          <div class="preview-row">
-            <span class="comp-badge" style="background:${d.badgeBlueBg};color:${d.badgeBlueColor};">Blue</span>
-            <span class="comp-badge" style="background:${d.badgeGreenBg};color:${d.badgeGreenColor};">Green</span>
-            <span class="comp-badge" style="background:${d.badgeRedBg};color:${d.badgeRedColor};">Red</span>
+            <span class="comp-btn slim" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">Primary Weak</span>
           </div>
           <div class="preview-row">
-            <span class="comp-badge" style="background:${d.badgeYellowBg};color:${d.badgeYellowColor};">Yellow</span>
-            <span class="comp-badge" style="background:${d.badgeElephantBg};color:${d.badgeElephantColor};">Elephant</span>
-            <span class="comp-badge outline" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Outline</span>
+            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.borderDefault};">Neutral</span>
+            <span class="comp-chip" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Primary</span>
+            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.hairline};">Hairline</span>
           </div>
-          <div class="preview-row">
-            <span class="comp-chip" style="color:${d.buttonPrimary};border-color:${d.borderPrimary};">Brand</span>
-            <span class="comp-chip" style="color:${d.badgeRedColor};border-color:${d.borderWarning};">Critical</span>
-            <span class="comp-chip" style="color:${d.textSecondary};border-color:${d.hairline};">Neutral</span>
-          </div>
-        </div>
-        <div class="preview-block" style="background:${d.panel};">
-          <div class="preview-block-title" style="color:${d.textSecondary};">Feedback</div>
-          <div class="preview-stack">
-            <div class="preview-toast" style="background:${d.buttonDarkFill};color:${d.buttonDarkOn};">Toast · Processing payment…</div>
-            <div class="comp-banner" style="background:${d.buttonDangerWeak};color:${d.buttonDangerWeakOn};">Error · Please retry</div>
-            <div class="comp-banner" style="background:${d.buttonPrimaryWeak};color:${d.buttonPrimaryWeakOn};">Info · Portfolio synced</div>
+          <div class="preview-mini" style="background:${d.buttonPrimary};color:${d.buttonPrimaryOn};position:relative;overflow:hidden;">
+            Pressed
+            <span style="position:absolute;inset:0;background:${d.pressedOverlay};"></span>
           </div>
         </div>
-        <div class="preview-block" style="background:${d.panel};">
-          <div class="preview-block-title" style="color:${d.textSecondary};">Token Checks</div>
-          <div class="preview-stack">
-            <div class="preview-item" style="background:${d.muted};border:1px solid ${d.hairline};">
-              <span class="preview-name" style="color:${d.textSecondary};">button.primary.fill</span>
-              <span class="preview-value" style="color:${d.textPrimary};">${d.buttonPrimary}</span>
+        <div class="preview-grid">
+          <div class="preview-block" style="background:${d.primarySubtleBg};">
+            <div class="preview-block-title" style="color:${d.textSecondary};">배지 / 상태</div>
+            <div class="preview-row">
+              <span class="comp-badge" style="background:${d.badgeBlueBg};color:${d.badgeBlueColor};">정보</span>
+              <span class="comp-badge" style="background:${d.badgeGreenBg};color:${d.badgeGreenColor};">성공</span>
+              <span class="comp-badge" style="background:${d.badgeYellowBg};color:${d.badgeYellowColor};">주의</span>
             </div>
-            <div class="preview-item" style="background:${d.muted};border:1px solid ${d.hairline};">
-              <span class="preview-name" style="color:${d.textSecondary};">border.neutral.hairline</span>
-              <span class="preview-value" style="color:${d.textPrimary};">${d.hairline}</span>
+            <div class="preview-row">
+              <span class="comp-badge" style="background:${d.badgeRedBg};color:${d.badgeRedColor};">위험</span>
+              <span class="comp-badge" style="background:${d.badgeElephantBg};color:${d.badgeElephantColor};">중립</span>
+              <span class="comp-badge outline" style="color:${d.badgeOutlineText};border-color:${d.badgeOutlineBorder};">Outline</span>
+            </div>
+          </div>
+          <div class="preview-block" style="background:${d.panel};">
+            <div class="preview-block-title" style="color:${d.textSecondary};">경계 / 텍스트</div>
+            <div class="preview-stack tight">
+              <div class="preview-item" style="background:${d.surface};border:1px solid ${d.hairline};">
+                <span class="preview-name" style="color:${d.textSecondary};">결제 카드</span>
+                <span class="preview-value" style="color:${d.textPrimary};">₩124만</span>
+              </div>
+              <div class="preview-item" style="background:${d.muted};border:1px solid ${d.borderDefault};">
+                <span class="preview-name" style="color:${d.textTertiary};">보조 영역</span>
+                <span class="preview-value" style="color:${d.textSecondary};">Border / text</span>
+              </div>
+              <div class="preview-item" style="background:transparent;border:1px solid ${d.borderPrimary};">
+                <span class="preview-name" style="color:${d.textSecondary};">Outline Button</span>
+                <span class="preview-value" style="color:${d.buttonPrimary};">Primary</span>
+              </div>
+            </div>
+          </div>
+          <div class="preview-block" style="background:${d.panel};">
+            <div class="preview-block-title" style="color:${d.textSecondary};">피드백</div>
+            <div class="preview-stack">
+              <div class="preview-toast" style="background:${d.buttonDarkFill};color:${d.buttonDarkOn};">토스트 · 결제 처리 중</div>
+              <div class="preview-alert" style="background:${d.fillCriticalWeak};border-color:${d.borderCritical};color:${d.textCritical};">
+                <div class="preview-alert-kicker">오류</div>
+                <div class="preview-alert-title">다시 시도해 주세요</div>
+              </div>
+              <div class="preview-alert" style="background:${d.fillInfoWeak};border-color:${d.borderInfo};color:${d.textInfo};">
+                <div class="preview-alert-kicker">정보</div>
+                <div class="preview-alert-title">포트폴리오 동기화 완료</div>
+              </div>
+            </div>
+          </div>
+          <div class="preview-block" style="background:${d.panel};">
+            <div class="preview-block-title" style="color:${d.textSecondary};">Surface 위계</div>
+            <div class="preview-stack tight">
+              <div class="surface-row">
+                <span class="surface-chip" style="background:${d.surface};color:${d.textSecondary};border:1px solid ${d.hairline};">Surface</span>
+                <span class="surface-chip" style="background:${d.panel};color:${d.textSecondary};border:1px solid ${d.hairline};">Elevated</span>
+                <span class="surface-chip" style="background:${d.muted};color:${d.textPrimary};border:1px solid ${d.hairline};">Muted</span>
+              </div>
+              <div class="preview-mini" style="background:${d.dimmed};color:#fff;">Dimmed Overlay (${d.dimmed})</div>
             </div>
           </div>
         </div>
@@ -2838,7 +3017,7 @@
     </div>
   `;
 
-        el.innerHTML = `${renderMode('Dark Mode', dark)}${renderMode('Light Mode', light)}`;
+        el.innerHTML = `${renderMode('다크 모드', dark)}${renderMode('라이트 모드', light)}`;
       }
 
       function buildPaletteMarkdown(
@@ -2909,6 +3088,24 @@
             tokenMap[name] ? tokenMap[name].dark : '-',
             tokenMap[name] ? tokenMap[name].light : '-',
           );
+        const componentRows = [
+          ['Primary 버튼 fill', 'button.primary.fill'],
+          ['Primary 버튼 weak', 'button.primary.weak'],
+          ['Primary 버튼 outline', 'border.primary.default'],
+          ['Neutral border hairline', 'border.neutral.hairline'],
+          ['Dimmed overlay', 'background.neutral.dimmed'],
+          ['Critical banner', 'fill.critical.weak'],
+          ['Info badge', 'badge.blue.background'],
+          ['Neutral text', 'text.neutral.primary'],
+        ]
+          .map(([label, tokenName]) =>
+            row(
+              label,
+              tokenMap[tokenName] ? tokenMap[tokenName].dark : '-',
+              tokenMap[tokenName] ? tokenMap[tokenName].light : '-',
+            ),
+          )
+          .join('\n');
         const groupedTokenRows = targetOrder
           .map((target) => {
             const rows = semanticTokens
@@ -2937,11 +3134,11 @@
           })
           .join('\n\n');
 
-        return `# Palette Export
+        return `# PALETTE.md
 
-Generated from: \`${inputHex}\`
+입력값: \`${inputHex}\`
 
-## Key Tokens
+## 핵심 토큰
 | Token | Dark | Light |
 | --- | --- | --- |
 ${tokenRow('fill.primary.default')}
@@ -2952,7 +3149,7 @@ ${tokenRow('fill.positive.default')}
 ${tokenRow('fill.warning.default')}
 ${tokenRow('fill.critical.default')}
 
-## Grey Scale
+## Neutral Scale
 | Step | Dark | Light |
 | --- | --- | --- |
 ${scaleRows(greyDark, greyLight)}
@@ -2972,19 +3169,24 @@ ${row(surfaceDark[3].name, surfaceDark[3].hex, surfaceLight[3].hex)}
 ${row(surfaceDark[4].name, surfaceDark[4].hex, surfaceLight[4].hex)}
 ${row(surfaceDark[5].name, surfaceDark[5].hex, surfaceLight[5].hex)}
 
+## 실무 컴포넌트 매핑
+| Component | Dark | Light |
+| --- | --- | --- |
+${componentRows}
+
 ## Harmonized Semantic Families
 ${familyBlocks}
 
 ## Semantic Token Matrix
 ${groupedTokenRows}
 
-## How To Use
+## 사용법
 - Base scale -> semantic -> component 순서로 사용합니다. raw palette를 컴포넌트에서 직접 쓰지 말고 semantic token을 통해 연결하세요.
 - semantic family는 hue는 고정 의미색을 유지하고, primary 영향은 명도/채도 톤 보정으로만 반영됩니다.
 - Fill/Text/Border/Background와 Button/Badge alias를 분리하면 컴포넌트 구현에서 의도 전달이 쉬워집니다.
 - 같은 역할이라면 target이 달라도 같은 role을 유지하세요. 예: \`fill.warning.default\` + \`text.warning.default\` + \`border.warning.default\`.
 
-## Practical Tips
+## 실무 팁
 1. Primary 강색은 행동 유도 포인트에만 제한적으로 사용하고, 정보 전달은 neutral + semantic text로 분리하세요.
 2. Warning/Critical은 먼저 subtle background로 쓰고, 필요할 때만 fill default로 올리면 과한 경고 피로를 줄일 수 있습니다.
 3. status role(positive/warning/critical/error/info)은 의미색 hue를 고정하고, 톤 보정만 허용하세요.
