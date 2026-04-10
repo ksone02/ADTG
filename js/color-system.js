@@ -273,8 +273,8 @@
         const affinity = referenceAffinity(hue, sourceChroma, sourceLightness);
         const tintChromaBase =
           sourceChroma == null
-            ? 0.008
-            : clamp(0.005 + sourceChroma * 0.02, 0.006, 0.011);
+            ? 0.003
+            : clamp(0.002 + sourceChroma * 0.006, 0.0025, 0.0045);
         const referenceScale =
           mode === 'dark'
             ? TOSS_REFERENCE_SCALES.grey.dark
@@ -350,8 +350,8 @@
         const affinity = referenceAffinity(hue, sourceChroma, sourceLightness);
         const tint =
           sourceChroma == null
-            ? 0.005
-            : clamp(0.0035 + sourceChroma * 0.012, 0.004, 0.008);
+            ? 0.002
+            : clamp(0.0015 + sourceChroma * 0.004, 0.0018, 0.003);
         if (mode === 'dark') {
           const refs = [
             '#202027',
@@ -1084,12 +1084,12 @@
               rgbaFromHex(family.lightFill.fill, 0.44),
             ),
             makeSemanticToken(
-              'background',
-              role,
-              'subtle',
-              rgbaFromHex(family.darkFill.fill, 0.2),
-              rgbaFromHex(family.lightFill.fill, 0.1),
-            ),
+            'background',
+            role,
+            'subtle',
+            rgbaFromHex(family.darkFill.fill, 0.14),
+            rgbaFromHex(family.lightFill.fill, 0.055),
+          ),
           ];
         });
 
