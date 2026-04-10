@@ -109,6 +109,12 @@
         const filter = window.__tokenFilter || 'all';
         const filtered =
           filter === 'all' ? tokens : tokens.filter((t) => t.target === filter);
+        const ratioLabel = (value, ratio, apca) => {
+          if (ratio) return `WCAG ${ratio.toFixed(2)}:1 / APCA ${Math.round(apca)}`;
+          if (value === 'transparent') return '비율 없음(투명 토큰)';
+          if (value.startsWith('rgba')) return '비율 없음(알파 토큰)';
+          return '비율 없음(CSS 토큰)';
+        };
         el.innerHTML = filtered
           .map(
             (t) => `
@@ -119,13 +125,13 @@
           <div class="token-mode">다크</div>
           <div class="token-swatch" style="background:${t.dark};color:${t.darkText};">Aa</div>
           <div class="token-hex">${t.dark}</div>
-          <div class="token-ratio">${t.darkRatio ? `WCAG ${t.darkRatio.toFixed(2)}:1 / APCA ${Math.round(t.darkApca)}` : '비율 없음(알파 토큰)'}</div>
+          <div class="token-ratio">${ratioLabel(t.dark, t.darkRatio, t.darkApca)}</div>
         </div>
         <div class="token-cell">
           <div class="token-mode">라이트</div>
           <div class="token-swatch" style="background:${t.light};color:${t.lightText};">Aa</div>
           <div class="token-hex">${t.light}</div>
-          <div class="token-ratio">${t.lightRatio ? `WCAG ${t.lightRatio.toFixed(2)}:1 / APCA ${Math.round(t.lightApca)}` : '비율 없음(알파 토큰)'}</div>
+          <div class="token-ratio">${ratioLabel(t.light, t.lightRatio, t.lightApca)}</div>
         </div>
       </div>
     </div>
@@ -248,6 +254,46 @@
             mode,
             defaults.pressedOverlay,
           ),
+          gradientToBottom: get(
+            'effect.gradient.toBottom',
+            mode,
+            defaults.gradientToBottom,
+          ),
+          layeredGradientToTop: get(
+            'effect.gradient.layeredToTop',
+            mode,
+            defaults.layeredGradientToTop,
+          ),
+          hairlineBackground: get(
+            'effect.hairline.background',
+            mode,
+            defaults.hairlineBackground,
+          ),
+          toastBackground: get(
+            'effect.toast.background',
+            mode,
+            defaults.toastBackground,
+          ),
+          toastBackgroundOn: on(
+            'effect.toast.background',
+            mode,
+            defaults.toastBackgroundOn,
+          ),
+          swiperBulletBackground: get(
+            'effect.swiperBullet.background',
+            mode,
+            defaults.swiperBulletBackground,
+          ),
+          listRowDisabledBackground: get(
+            'state.listRow.disabledBackground',
+            mode,
+            defaults.listRowDisabledBackground,
+          ),
+          radioIndicatorBackground: get(
+            'control.radio.indicatorBackground',
+            mode,
+            defaults.radioIndicatorBackground,
+          ),
           borderPrimary: get(
             'border.primary.default',
             mode,
@@ -342,6 +388,14 @@
           buttonNeutralWeak: rgbaFromHex('#d9d9ff', 0.11),
           buttonNeutralWeakOn: greyDark[7],
           pressedOverlay: 'rgba(0,0,0,0.26)',
+          gradientToBottom: `linear-gradient(to bottom, ${surfaces.dark[1].hex}, ${rgbaFromHex(surfaces.dark[1].hex, 0)})`,
+          layeredGradientToTop: `linear-gradient(to top, ${surfaces.dark[2].hex}, ${rgbaFromHex(surfaces.dark[2].hex, 0)})`,
+          hairlineBackground: `linear-gradient(to bottom, ${greyDark[2]} 0, ${greyDark[2]} 50%, transparent 50%, transparent 100%)`,
+          toastBackground: rgbaFromHex(greyDark[9], 0.11),
+          toastBackgroundOn: '#ffffff',
+          swiperBulletBackground: rgbaFromHex(greyDark[8], 0.31),
+          listRowDisabledBackground: rgbaFromHex(surfaces.dark[1].hex, 0.7),
+          radioIndicatorBackground: greyDark[3],
           borderPrimary: rgbaFromHex(primaryDark[5], 0.52),
           borderWarning: rgbaFromHex('#ffc259', 0.48),
           badgeBlueBg: rgbaFromHex('#4593fc', 0.16),
@@ -388,6 +442,14 @@
           buttonNeutralWeak: rgbaFromHex('#4e5968', 0.12),
           buttonNeutralWeakOn: greyLight[7],
           pressedOverlay: 'transparent',
+          gradientToBottom: `linear-gradient(to bottom, ${surfaces.light[1].hex}, ${rgbaFromHex(surfaces.light[1].hex, 0)})`,
+          layeredGradientToTop: `linear-gradient(to top, ${surfaces.light[2].hex}, ${rgbaFromHex(surfaces.light[2].hex, 0)})`,
+          hairlineBackground: `linear-gradient(to bottom, ${greyLight[2]} 0, ${greyLight[2]} 50%, transparent 50%, transparent 100%)`,
+          toastBackground: rgbaFromHex(greyLight[9], 0.54),
+          toastBackgroundOn: '#ffffff',
+          swiperBulletBackground: rgbaFromHex(greyLight[8], 0.36),
+          listRowDisabledBackground: rgbaFromHex(surfaces.light[1].hex, 0.75),
+          radioIndicatorBackground: surfaces.light[2].hex,
           borderPrimary: rgbaFromHex(primaryLight[5], 0.4),
           borderWarning: rgbaFromHex('#ffb331', 0.42),
           badgeBlueBg: rgbaFromHex('#3182f6', 0.16),
@@ -477,7 +539,7 @@
           <div class="preview-block" style="background:${d.panel};">
             <div class="preview-block-title" style="color:${d.textSecondary};">피드백</div>
             <div class="preview-stack">
-              <div class="preview-toast" style="background:${d.buttonDarkFill};color:${d.buttonDarkOn};">토스트 · 결제 처리 중</div>
+              <div class="preview-toast" style="background:${d.toastBackground};color:${d.toastBackgroundOn};">토스트 · 결제 처리 중</div>
               <div class="preview-alert" style="background:${d.fillCriticalWeak};border-color:${d.borderCritical};color:${d.textCritical};">
                 <div class="preview-alert-kicker">오류</div>
                 <div class="preview-alert-title">다시 시도해 주세요</div>
@@ -491,10 +553,27 @@
           <div class="preview-block" style="background:${d.panel};">
             <div class="preview-block-title" style="color:${d.textSecondary};">표면 위계</div>
             <div class="preview-stack tight">
+              <div class="preview-item" style="background:${d.gradientToBottom};border:1px solid ${d.hairline};">
+                <span class="preview-name" style="color:${d.textSecondary};">기본 그라데이션</span>
+                <span class="preview-value" style="color:${d.textPrimary};">to bottom</span>
+              </div>
+              <div class="preview-item" style="background:${d.layeredGradientToTop};border:1px solid ${d.hairline};">
+                <span class="preview-name" style="color:${d.textSecondary};">레이어 그라데이션</span>
+                <span class="preview-value" style="color:${d.textPrimary};">to top</span>
+              </div>
+              <div class="preview-item" style="background:${d.listRowDisabledBackground};border:1px solid ${d.hairline};">
+                <span class="preview-name" style="color:${d.textSecondary};">비활성 리스트</span>
+                <span class="preview-value" style="color:${d.textTertiary};">disabled</span>
+              </div>
               <div class="surface-row">
                 <span class="surface-chip" style="background:${d.surface};color:${d.textSecondary};border:1px solid ${d.hairline};">표면</span>
                 <span class="surface-chip" style="background:${d.panel};color:${d.textSecondary};border:1px solid ${d.hairline};">레이어</span>
                 <span class="surface-chip" style="background:${d.muted};color:${d.textPrimary};border:1px solid ${d.hairline};">약한 배경</span>
+              </div>
+              <div class="surface-row">
+                <span class="surface-chip" style="background:${d.hairlineBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">헤어라인 배경</span>
+                <span class="surface-chip" style="background:${d.radioIndicatorBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">라디오 인디케이터</span>
+                <span class="surface-chip" style="background:${d.swiperBulletBackground};color:${d.textSecondary};border:1px solid ${d.hairline};">스와이퍼 점</span>
               </div>
               <div class="preview-mini" style="background:${d.dimmed};color:#fff;">딤드 오버레이 (${d.dimmed})</div>
             </div>
@@ -562,6 +641,8 @@
           'button',
           'badge',
           'state',
+          'control',
+          'effect',
         ];
 
         const row = (name, dark, light) => `| ${name} | ${dark} | ${light} |`;
@@ -590,6 +671,10 @@
           ['청록 배지', 'badge.teal.background'],
           ['중립 배지', 'badge.elephant.background'],
           ['누름 오버레이', 'state.button.pressedOverlay'],
+          ['하단 그라데이션', 'effect.gradient.toBottom'],
+          ['레이어 그라데이션', 'effect.gradient.layeredToTop'],
+          ['토스트 배경', 'effect.toast.background'],
+          ['라디오 인디케이터', 'control.radio.indicatorBackground'],
           ['중립 텍스트', 'text.neutral.primary'],
         ]
           .map(([label, tokenName]) =>

@@ -966,12 +966,12 @@
         forceLightText,
       ) {
         const name = `${target}.${role}.${variant}`;
-        const darkPair = dark.startsWith('rgba')
-          ? { text: '#ffffff', ratio: null, apca: null }
-          : pickAccessiblePair(dark, 4.5, 60);
-        const lightPair = light.startsWith('rgba')
-          ? { text: '#0b1220', ratio: null, apca: null }
-          : pickAccessiblePair(light, 4.5, 60);
+        const darkPair = /^#[0-9a-fA-F]{6}$/.test(dark)
+          ? pickAccessiblePair(dark, 4.5, 60)
+          : { text: '#ffffff', ratio: null, apca: null };
+        const lightPair = /^#[0-9a-fA-F]{6}$/.test(light)
+          ? pickAccessiblePair(light, 4.5, 60)
+          : { text: '#0b1220', ratio: null, apca: null };
         return {
           name,
           target,
@@ -1156,6 +1156,91 @@
 
         const baseTokens = [...neutralTokens, ...roleTokens];
         const tokenMap = Object.fromEntries(baseTokens.map((t) => [t.name, t]));
+        const surfaceGradient = (direction, hex) =>
+          `linear-gradient(to ${direction}, ${hex}, ${rgbaFromHex(hex, 0)})`;
+        const hairlineBackground = (hex) =>
+          `linear-gradient(to bottom, ${hex} 0, ${hex} 50%, transparent 50%, transparent 100%)`;
+        const effectTokens = [
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'toTop',
+            surfaceGradient('top', surfaces.dark[1].hex),
+            surfaceGradient('top', surfaces.light[1].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'toBottom',
+            surfaceGradient('bottom', surfaces.dark[1].hex),
+            surfaceGradient('bottom', surfaces.light[1].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'toLeft',
+            surfaceGradient('left', surfaces.dark[1].hex),
+            surfaceGradient('left', surfaces.light[1].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'toRight',
+            surfaceGradient('right', surfaces.dark[1].hex),
+            surfaceGradient('right', surfaces.light[1].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'layeredToTop',
+            surfaceGradient('top', surfaces.dark[2].hex),
+            surfaceGradient('top', surfaces.light[2].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'gradient',
+            'layeredToBottom',
+            surfaceGradient('bottom', surfaces.dark[2].hex),
+            surfaceGradient('bottom', surfaces.light[2].hex),
+          ),
+          makeSemanticToken(
+            'effect',
+            'hairline',
+            'background',
+            hairlineBackground(greyDark[2]),
+            hairlineBackground(greyLight[2]),
+          ),
+          makeSemanticToken(
+            'effect',
+            'toast',
+            'background',
+            rgbaFromHex(greyDark[9], 0.11),
+            rgbaFromHex(greyLight[9], 0.54),
+            '#ffffff',
+            '#ffffff',
+          ),
+          makeSemanticToken(
+            'effect',
+            'swiperBullet',
+            'background',
+            rgbaFromHex(greyDark[8], 0.31),
+            rgbaFromHex(greyLight[8], 0.36),
+          ),
+          makeSemanticToken(
+            'state',
+            'listRow',
+            'disabledBackground',
+            rgbaFromHex(surfaces.dark[1].hex, 0.7),
+            rgbaFromHex(surfaces.light[1].hex, 0.75),
+          ),
+          makeSemanticToken(
+            'control',
+            'radio',
+            'indicatorBackground',
+            greyDark[3],
+            surfaces.light[2].hex,
+          ),
+        ];
         const pick = (
           name,
           fallbackDark = '#000000',
@@ -1432,5 +1517,5 @@
           ),
         ];
 
-        return [...baseTokens, ...tossLikeTokens];
+        return [...baseTokens, ...effectTokens, ...tossLikeTokens];
       }

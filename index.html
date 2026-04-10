@@ -1101,7 +1101,7 @@
           <section class="section">
           <div class="section-title">시맨틱 토큰</div>
           <div class="section-desc">
-              fill/text/border/background/button/badge/state 계층을 한 번에 확인합니다.
+              fill/text/border/background/button/badge/state/control/effect 계층을 한 번에 확인합니다.
           </div>
             <div class="token-filter" id="tokenFilter">
               <button
@@ -1159,6 +1159,20 @@
                 type="button"
               >
                 상태
+              </button>
+              <button
+                class="token-filter-btn"
+                data-token-filter="control"
+                type="button"
+              >
+                컨트롤
+              </button>
+              <button
+                class="token-filter-btn"
+                data-token-filter="effect"
+                type="button"
+              >
+                효과
               </button>
             </div>
             <div class="token-grid" id="semanticTokens"></div>
